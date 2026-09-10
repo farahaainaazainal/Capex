@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Brick Capital - Statutory Outflow Schedule</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen py-10 px-4 sm:px-6 lg:px-8">
+
+    <div class="max-w-5xl mx-auto space-y-8">
+        
+        <!-- Header & Breadcrumb -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800 pb-6">
+            <div>
+                <a href="index.html" class="inline-flex items-center text-xs font-semibold text-sky-400 hover:text-sky-300 transition-colors mb-2">
+                    <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i> Back to Group Payroll Dashboard
+                </a>
+                <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+                    Red Brick Capital Sdn Bhd
+                </h1>
+                <p class="text-sm text-slate-400 mt-1">
+                    Monthly Statutory Schedule & Bank Outflow Reconciliation • 1 Pax Permanent Employee
+                </p>
+            </div>
+            <div class="flex items-center gap-2 self-start sm:self-center">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 mr-2 animate-pulse"></span>
+                    Verified Calculation
+                </span>
+            </div>
+        </div>
+
+        <!-- Highlight Metric Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <!-- Total Outflow -->
+            <div class="bg-gradient-to-br from-indigo-900/60 to-slate-900 p-5 rounded-2xl border border-indigo-500/30 shadow-xl relative overflow-hidden">
+                <div class="text-xs font-semibold uppercase tracking-wider text-indigo-300">Total Bank Outflow</div>
+                <div class="text-2xl sm:text-3xl font-black text-white mt-2">RM 11,652.05</div>
+                <div class="text-xs text-indigo-300/80 mt-1 flex items-center">
+                    <i data-lucide="wallet" class="w-3.5 h-3.5 mr-1"></i> Total monthly cash leaving bank
+                </div>
+            </div>
+
+            <!-- Net Salary Outflow -->
+            <div class="bg-slate-800/60 p-5 rounded-2xl border border-slate-700/60 shadow-md">
+                <div class="text-xs font-semibold uppercase tracking-wider text-slate-400">Net Salary (Staff Payout)</div>
+                <div class="text-2xl font-bold text-white mt-2">RM 8,326.50</div>
+                <div class="text-xs text-slate-400 mt-1 flex items-center">
+                    <i data-lucide="calendar" class="w-3.5 h-3.5 mr-1"></i> Payable by 28th of month
+                </div>
+            </div>
+
+            <!-- Total Statutory Outflow -->
+            <div class="bg-slate-800/60 p-5 rounded-2xl border border-slate-700/60 shadow-md">
+                <div class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Statutory Outflow</div>
+                <div class="text-2xl font-bold text-amber-400 mt-2">RM 3,325.55</div>
+                <div class="text-xs text-slate-400 mt-1 flex items-center">
+                    <i data-lucide="building" class="w-3.5 h-3.5 mr-1"></i> KWSP + PERKESO + LHDN
+                </div>
+            </div>
+
+            <!-- Total Employer On-Cost -->
+            <div class="bg-slate-800/60 p-5 rounded-2xl border border-slate-700/60 shadow-md">
+                <div class="text-xs font-semibold uppercase tracking-wider text-slate-400">Employer Contribution</div>
+                <div class="text-2xl font-bold text-cyan-400 mt-2">RM 1,352.05</div>
+                <div class="text-xs text-slate-400 mt-1 flex items-center">
+                    <i data-lucide="layers" class="w-3.5 h-3.5 mr-1"></i> Company cost over gross salary
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Master Outflow Breakdown Table -->
+        <div class="bg-slate-800/50 rounded-2xl border border-slate-700/60 overflow-hidden shadow-xl">
+            <div class="px-6 py-4 border-b border-slate-700 flex items-center justify-between">
+                <div>
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        <i data-lucide="file-spreadsheet" class="w-5 h-5 text-indigo-400"></i>
+                        Statutory Schedule & Payment Reconciliation
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Summary based on Monthly Gross RM 10,300 (Basic RM 8,000 + Fixed Allowance RM 2,300)</p>
+                </div>
+                <span class="text-xs text-slate-400 hidden sm:inline">Monthly Routine Cycle</span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead>
+                        <tr class="bg-slate-900/60 text-slate-400 text-xs uppercase tracking-wider border-b border-slate-700">
+                            <th class="py-3.5 px-6">Payment Component</th>
+                            <th class="py-3.5 px-4">Beneficiary / Portal</th>
+                            <th class="py-3.5 px-4 text-right">Employee (RM)</th>
+                            <th class="py-3.5 px-4 text-right">Employer (RM)</th>
+                            <th class="py-3.5 px-4 text-right">Total Schedule Cost (RM)</th>
+                            <th class="py-3.5 px-6 text-center">Due Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800 text-slate-200">
+                        <!-- Net Pay -->
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="py-4 px-6 font-semibold flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                                Net Salary
+                            </td>
+                            <td class="py-4 px-4 text-slate-400">Employee Direct Credit</td>
+                            <td class="py-4 px-4 text-right font-mono text-emerald-400">8,326.50</td>
+                            <td class="py-4 px-4 text-right font-mono text-slate-500">—</td>
+                            <td class="py-4 px-4 text-right font-mono font-bold text-emerald-400">8,326.50</td>
+                            <td class="py-4 px-6 text-center text-xs text-slate-400 font-medium">28th of Month</td>
+                        </tr>
+
+                        <!-- EPF -->
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="py-4 px-6 font-medium flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span>
+                                EPF (KWSP)
+                            </td>
+                            <td class="py-4 px-4 text-slate-400">i-Akaun Majikan</td>
+                            <td class="py-4 px-4 text-right font-mono">1,133.00</td>
+                            <td class="py-4 px-4 text-right font-mono text-cyan-400">1,236.00</td>
+                            <td class="py-4 px-4 text-right font-mono font-bold text-white">2,369.00</td>
+                            <td class="py-4 px-6 text-center text-xs text-amber-400 font-medium">15th of Next Month</td>
+                        </tr>
+
+                        <!-- SOCSO -->
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="py-4 px-6 font-medium flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-indigo-400"></span>
+                                SOCSO (PERKESO)
+                            </td>
+                            <td class="py-4 px-4 text-slate-400">PERKESO ASSIST</td>
+                            <td class="py-4 px-4 text-right font-mono">74.40</td>
+                            <td class="py-4 px-4 text-right font-mono text-cyan-400">104.15</td>
+                            <td class="py-4 px-4 text-right font-mono font-bold text-white">178.55</td>
+                            <td class="py-4 px-6 text-center text-xs text-amber-400 font-medium">15th of Next Month</td>
+                        </tr>
+
+                        <!-- EIS -->
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="py-4 px-6 font-medium flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-sky-400"></span>
+                                EIS (SIP)
+                            </td>
+                            <td class="py-4 px-4 text-slate-400">PERKESO ASSIST</td>
+                            <td class="py-4 px-4 text-right font-mono">11.90</td>
+                            <td class="py-4 px-4 text-right font-mono text-cyan-400">11.90</td>
+                            <td class="py-4 px-4 text-right font-mono font-bold text-white">23.80</td>
+                            <td class="py-4 px-6 text-center text-xs text-amber-400 font-medium">15th of Next Month</td>
+                        </tr>
+
+                        <!-- Combined SOCSO + EIS Highlight Row -->
+                        <tr class="bg-indigo-950/20 text-indigo-200 text-xs">
+                            <td colspan="4" class="py-2.5 px-6 font-semibold italic">
+                                ↳ Combined PERKESO Remittance (SOCSO + EIS):
+                            </td>
+                            <td class="py-2.5 px-4 text-right font-mono font-bold text-indigo-300">
+                                RM 202.35
+                            </td>
+                            <td class="py-2.5 px-6 text-center text-slate-400">Paid together</td>
+                        </tr>
+
+                        <!-- PCB -->
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="py-4 px-6 font-medium flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-rose-400"></span>
+                                Monthly Tax Deduction (PCB)
+                            </td>
+                            <td class="py-4 px-4 text-slate-400">LHDN e-Data PCB / e-CP39</td>
+                            <td class="py-4 px-4 text-right font-mono">754.20</td>
+                            <td class="py-4 px-4 text-right font-mono text-slate-500">—</td>
+                            <td class="py-4 px-4 text-right font-mono font-bold text-white">754.20</td>
+                            <td class="py-4 px-6 text-center text-xs text-amber-400 font-medium">15th of Next Month</td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="bg-slate-900 border-t-2 border-slate-700 text-white font-bold">
+                        <tr>
+                            <td colspan="2" class="py-4 px-6 text-sm">TOTAL BANK DISBURSEMENT</td>
+                            <td class="py-4 px-4 text-right font-mono text-slate-300">RM 1,973.50</td>
+                            <td class="py-4 px-4 text-right font-mono text-cyan-400">RM 1,352.05</td>
+                            <td class="py-4 px-4 text-right font-mono text-lg text-emerald-400">RM 11,652.05</td>
+                            <td class="py-4 px-6 text-center text-xs font-semibold text-slate-400">Full Cycle</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <!-- Statutory Outflow Math Verification Box -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-slate-800/40 p-5 rounded-xl border border-slate-800">
+                <h3 class="text-sm font-bold text-slate-300 mb-3 flex items-center gap-2">
+                    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+                    Reconciliation Verification
+                </h3>
+                <ul class="text-xs text-slate-400 space-y-2 font-mono">
+                    <li class="flex justify-between">
+                        <span>Net Salary Outflow:</span>
+                        <span class="text-slate-200">RM 8,326.50</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span>EPF Outflow (Employee + Employer):</span>
+                        <span class="text-slate-200">RM 2,369.00</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span>SOCSO + EIS Outflow:</span>
+                        <span class="text-slate-200">RM 202.35</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span>PCB (LHDN) Outflow:</span>
+                        <span class="text-slate-200">RM 754.20</span>
+                    </li>
+                    <li class="flex justify-between pt-2 border-t border-slate-700 font-bold text-sm">
+                        <span class="text-slate-200">Total Monthly Bank Debit:</span>
+                        <span class="text-emerald-400">RM 11,652.05</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-slate-800/40 p-5 rounded-xl border border-slate-800">
+                <h3 class="text-sm font-bold text-slate-300 mb-3 flex items-center gap-2">
+                    <i data-lucide="clock" class="w-4 h-4 text-sky-400"></i>
+                    Statutory Remittance Deadlines
+                </h3>
+                <div class="space-y-2.5 text-xs text-slate-300">
+                    <div class="p-2 rounded bg-slate-900/60 border border-slate-800">
+                        <strong class="text-white">28th of every month:</strong> Net salary transfer to employee via direct bank giro/payroll transfer (RM 8,326.50).
+                    </div>
+                    <div class="p-2 rounded bg-slate-900/60 border border-slate-800">
+                        <strong class="text-white">15th of subsequent month:</strong> Mandatory cut-off for online payment to KWSP, PERKESO (SOCSO + EIS), and LHDN PCB (RM 3,325.55).
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="pt-6 border-t border-slate-800 text-center text-xs text-slate-500">
+            Confidential • Red Brick Capital Sdn Bhd • Internal Finance & Statutory Schedule
+        </div>
+
+    </div>
+
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
