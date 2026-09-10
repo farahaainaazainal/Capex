@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Driver Timesheet & Payroll | H2O Savers Sdn Bhd</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome CDN -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+    .card-shadow {
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+      transition: all 0.2s ease;
+    }
+    .card-shadow:hover {
+      box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.06), 0 3px 5px -2px rgba(0, 0, 0, 0.04);
+    }
+    .table-container::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    .table-container::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="antialiased min-h-screen p-4 sm:p-6 lg:p-10">
+
+  <div class="max-w-7xl mx-auto space-y-6">
+
+    <!-- Top Header -->
+    <header class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 mb-2">
+          <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+          POB H20 Saver Sdn Bhd • Operations Register
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Driver Payroll & Timesheet</h1>
+        <p class="text-slate-500 text-sm mt-1">
+          Permanent (Contract for Service) & Ad-hoc Part-Time Driver Records &bull; <strong>Cut-off: 24th to 23rd</strong>
+        </p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-all">
+          <i class="fas fa-arrow-left text-[11px]"></i>
+          <span>Back to Main Summary</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Month Selector (0826 to 1226) -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Select Payroll Cycle</span>
+        <div class="flex flex-wrap gap-2 mt-2" id="cycleTabs">
+          <button onclick="switchMonth('0826')" id="tab-0826" class="px-4 py-2 rounded-xl text-xs font-bold border transition-all">
+            Sheet 0826 <span class="font-normal opacity-75 block text-[11px]">(24 Jul – 23 Aug)</span>
+          </button>
+          <button onclick="switchMonth('0926')" id="tab-0926" class="px-4 py-2 rounded-xl text-xs font-bold border transition-all">
+            Sheet 0926 <span class="font-normal opacity-75 block text-[11px]">(24 Aug – 23 Sep)</span>
+          </button>
+          <button onclick="switchMonth('1026')" id="tab-1026" class="px-4 py-2 rounded-xl text-xs font-bold border transition-all">
+            Sheet 1026 <span class="font-normal opacity-75 block text-[11px]">(24 Sep – 23 Oct)</span>
+          </button>
+          <button onclick="switchMonth('1126')" id="tab-1126" class="px-4 py-2 rounded-xl text-xs font-bold border transition-all">
+            Sheet 1126 <span class="font-normal opacity-75 block text-[11px]">(24 Oct – 23 Nov)</span>
+          </button>
+          <button onclick="switchMonth('1226')" id="tab-1226" class="px-4 py-2 rounded-xl text-xs font-bold border transition-all">
+            Sheet 1226 <span class="font-normal opacity-75 block text-[11px]">(24 Nov – 23 Dec)</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="text-left md:text-right border-t md:border-t-0 pt-3 md:pt-0 border-slate-100">
+        <div class="text-xs text-slate-400 font-medium">Active Cycle Range</div>
+        <div class="text-sm font-extrabold text-slate-800 mt-0.5" id="cycleRangeText">Loading...</div>
+        <div class="text-[11px] text-slate-500 mt-0.5">Rate: RM20/hr &bull; 9AM–6PM (8 Work Hrs)</div>
+      </div>
+    </div>
+
+    <!-- Summary KPI Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- Card 1: Permanent Driver (Contract for Service) -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div>
+              <span class="text-[11px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100 uppercase">
+                Contract for Service
+              </span>
+              <h3 class="font-bold text-slate-900 text-lg mt-2">Roslan bin Sharif</h3>
+              <p class="text-xs text-slate-400">Designation: Permanent Driver</p>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+              <i class="fas fa-id-card text-lg"></i>
+            </div>
+          </div>
+
+          <div class="mt-4 space-y-2 text-xs">
+            <div class="flex justify-between py-1 border-b border-slate-50">
+              <span class="text-slate-500">Basic Salary</span>
+              <span class="font-semibold text-slate-800" id="permBasic">RM 3,030.00</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-50">
+              <span class="text-slate-500">Meal Allowance</span>
+              <span class="font-semibold text-slate-800" id="permMeal">RM 650.00</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-50">
+              <span class="text-slate-500">Phone Allowance</span>
+              <span class="font-semibold text-slate-800" id="permPhone">RM 100.00</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-50">
+              <span class="text-slate-500">Total Overtime Pay</span>
+              <span class="font-bold text-indigo-600" id="permOT">RM 0.00</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-50">
+              <span class="text-slate-500">Annual Leave</span>
+              <span class="font-medium text-slate-600">Balance: <strong>14</strong> (Entitled: 16, Taken: 2)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-5 pt-3 border-t border-slate-100 flex justify-between items-center">
+          <span class="text-xs text-slate-500 font-medium">Gross Payable:</span>
+          <span class="font-extrabold text-blue-900 text-lg" id="permGross">RM 0.00</span>
+        </div>
+      </div>
+
+      <!-- Card 2: Part-Time Drivers Summary (Ad-hoc) -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div>
+              <span class="text-[11px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 uppercase">
+                Ad-hoc Drivers
+              </span>
+              <h3 class="font-bold text-slate-900 text-lg mt-2">Part-Time Summary</h3>
+              <p class="text-xs text-slate-400">Excluded from main summary</p>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
+              <i class="fas fa-users-gear text-lg"></i>
+            </div>
+          </div>
+
+          <div class="mt-4 space-y-2 text-xs">
+            <div class="flex justify-between py-1 border-b border-slate-50">
+              <span class="text-slate-500">Total Part-Time Headcount</span>
+              <span class="font-semibold text-slate-800" id="ptHeadcount">0 pax</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-50">
+              <span class="text-slate-500">Hourly Rate</span>
+              <span class="font-semibold text-slate-800">RM 20.00 / hr</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-50">
+              <span class="text-slate-500">Total Billable Hours</span>
+              <span class="font-semibold text-slate-800" id="ptHours">0 hrs</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-50">
+              <span class="text-slate-500">Standard Working Window</span>
+              <span class="font-medium text-slate-600">12:00 PM – 9:00 PM (9 hrs)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-5 pt-3 border-t border-slate-100 flex justify-between items-center">
+          <span class="text-xs text-slate-500 font-medium">Part-Time Total Pay:</span>
+          <span class="font-extrabold text-amber-800 text-lg" id="ptTotalPay">RM 0.00</span>
+        </div>
+      </div>
+
+      <!-- Card 3: Combined Operations Cost -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div>
+              <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 uppercase">
+                H2O Savers Sdn Bhd
+              </span>
+              <h3 class="font-bold text-slate-900 text-lg mt-2">Combined Fleet Outflow</h3>
+              <p class="text-xs text-slate-400">Total Driver Cost for Selected Cycle</p>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+              <i class="fas fa-wallet text-lg"></i>
+            </div>
+          </div>
+
+          <div class="mt-4 space-y-2 text-xs text-slate-600">
+            <div class="flex justify-between py-1 border-b border-slate-50">
+              <span>Permanent Driver Gross</span>
+              <span class="font-semibold text-slate-800" id="combPerm">RM 0.00</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-50">
+              <span>Part-Time Driver Wages</span>
+              <span class="font-semibold text-slate-800" id="combPT">RM 0.00</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-50">
+              <span>Statutory Deductions</span>
+              <span class="font-medium text-slate-400">None (Contract for Service)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-5 pt-3 border-t border-slate-100 flex justify-between items-center">
+          <span class="text-xs text-slate-500 font-medium">Total Gross Cost:</span>
+          <span class="font-extrabold text-emerald-700 text-xl" id="combTotal">RM 0.00</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Roslan bin Sharif Timesheet Section -->
+    <section class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 card-shadow">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-slate-100 gap-2">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+            <i class="fas fa-user-clock text-blue-600"></i> Permanent Driver Timesheet &mdash; Roslan bin Sharif
+          </h2>
+          <p class="text-xs text-slate-500 mt-1">Calculates working hours and OT earnings. Blank cells indicate unworked days or future schedule.</p>
+        </div>
+        <div class="text-xs text-slate-500 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200 font-medium self-start sm:self-auto">
+          Overtime Rate: RM20 / hr
+        </div>
+      </div>
+
+      <div class="overflow-x-auto table-container mt-4">
+        <table class="w-full text-left border-collapse min-w-[950px]">
+          <thead>
+            <tr class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-600 border-b border-slate-200">
+              <th class="py-3 px-3">Date In</th>
+              <th class="py-3 px-3 text-center">Time In</th>
+              <th class="py-3 px-3">Date Out</th>
+              <th class="py-3 px-3 text-center">Time Out</th>
+              <th class="py-3 px-2 text-center">Day</th>
+              <th class="py-3 px-3">Cost Centre</th>
+              <th class="py-3 px-3">Driver Name</th>
+              <th class="py-3 px-3 text-right">Total Hours</th>
+              <th class="py-3 px-3 text-right">OT / Billable Hrs</th>
+              <th class="py-3 px-3 text-right">OT Earnings (RM)</th>
+              <th class="py-3 px-3">Notes</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-xs text-slate-700" id="roslanTableBody">
+            <!-- Rendered by JavaScript -->
+          </tbody>
+          <tfoot>
+            <tr class="bg-slate-100/90 border-t-2 border-slate-300 text-xs font-bold text-slate-900">
+              <td colspan="7" class="py-3.5 px-3 uppercase tracking-wider text-slate-700">Total Cycle OT Summary</td>
+              <td class="py-3.5 px-3 text-right font-extrabold" id="footTotHours">0.0</td>
+              <td class="py-3.5 px-3 text-right font-extrabold text-blue-700" id="footOtHours">0.0</td>
+              <td class="py-3.5 px-3 text-right font-extrabold text-indigo-700" id="footOtEarnings">RM 0.00</td>
+              <td class="py-3.5 px-3"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- Part-Time Drivers Timesheet Section -->
+    <section class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 card-shadow">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-slate-100 gap-2">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+            <i class="fas fa-clock-rotate-left text-amber-600"></i> Part-Time / Ad-hoc Drivers Register
+          </h2>
+          <p class="text-xs text-slate-500 mt-1">Timesheet entries for part-time drivers hired on an ad-hoc basis.</p>
+        </div>
+        <div class="text-xs text-amber-800 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200 font-medium self-start sm:self-auto">
+          Confidential &bull; Not Shown on Main Page
+        </div>
+      </div>
+
+      <div class="overflow-x-auto table-container mt-4">
+        <table class="w-full text-left border-collapse min-w-[950px]">
+          <thead>
+            <tr class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-600 border-b border-slate-200">
+              <th class="py-3 px-3">Date In</th>
+              <th class="py-3 px-3 text-center">Time In</th>
+              <th class="py-3 px-3">Date Out</th>
+              <th class="py-3 px-3 text-center">Time Out</th>
+              <th class="py-3 px-2 text-center">Day</th>
+              <th class="py-3 px-3">Cost Centre</th>
+              <th class="py-3 px-3">Driver Name</th>
+              <th class="py-3 px-3 text-right">Total Hours</th>
+              <th class="py-3 px-3 text-right">Billable Hrs</th>
+              <th class="py-3 px-3 text-right">Total Pay (RM)</th>
+              <th class="py-3 px-3">Notes</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-xs text-slate-700" id="ptTableBody">
+            <!-- Rendered by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center text-xs text-slate-400 py-4">
+      POB H20 Saver Sdn Bhd &bull; Internal Driver Payroll & Timesheet &bull; Strictly Confidential
+    </footer>
+
+  </div>
+
+  <!-- Real Data Store (0826 to 1226) directly from Excel -->
+  <script>
+    const cycleMeta = {
+      "0826": { label: "24 July 2026 – 23 August 2026 (Sheet 0826)" },
+      "0926": { label: "24 August 2026 – 23 September 2026 (Sheet 0926)" },
+      "1026": { label: "24 September 2026 – 23 October 2026 (Sheet 1026)" },
+      "1126": { label: "24 October 2026 – 23 November 2026 (Sheet 1126)" },
+      "1226": { label: "24 November 2026 – 23 December 2026 (Sheet 1226)" }
+    };
+
+    // Actual payroll summary from Excel sheets
+    const payrollData = {
+      "0826": {
+        summary: { basic: 3030, meal: 650, phone: 100, otPay: 2200, gross: 5980, ptHours: 0, ptPay: 0 },
+        // Actual rows from sheet 0826
+        timesheet: [
+          { dateIn: "24/07/2026", timeIn: "09:00", dateOut: "24/07/2026", timeOut: "04:00", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: 19.0, otHrs: 10.0, otPay: 200.0, notes: "" },
+          { dateIn: "25/07/2026", timeIn: "12:00", dateOut: "25/07/2026", timeOut: "23:30", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: 11.5, otHrs: "", otPay: 230.0, notes: "Off Day" },
+          { dateIn: "26/07/2026", timeIn: "04:30", dateOut: "26/07/2026", timeOut: "07:00", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: 2.5, otHrs: "", otPay: 50.0, notes: "Off Day" },
+          { dateIn: "27/07/2026", timeIn: "12:00", dateOut: "27/07/2026", timeOut: "00:00", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: 12.0, otHrs: 3.0, otPay: 60.0, notes: "" },
+          { dateIn: "28/07/2026", timeIn: "", dateOut: "", timeOut: "", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "29/07/2026", timeIn: "09:30", dateOut: "29/07/2026", timeOut: "22:30", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: 13.0, otHrs: 4.0, otPay: 80.0, notes: "" },
+          { dateIn: "30/07/2026", timeIn: "10:00", dateOut: "30/07/2026", timeOut: "20:00", day: "Thu", type: "Permanent", name: "Roslan bin Sharif", totHrs: 10.0, otHrs: 1.0, otPay: 20.0, notes: "" },
+          { dateIn: "31/07/2026", timeIn: "09:30", dateOut: "31/07/2026", timeOut: "21:30", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: 12.0, otHrs: 3.0, otPay: 60.0, notes: "" },
+          { dateIn: "01/08/2026", timeIn: "11:00", dateOut: "01/08/2026", timeOut: "23:00", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: 12.0, otHrs: "", otPay: 240.0, notes: "Off Day" },
+          { dateIn: "02/08/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "03/08/2026", timeIn: "", dateOut: "", timeOut: "", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "04/08/2026", timeIn: "09:00", dateOut: "04/08/2026", timeOut: "22:30", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: 13.5, otHrs: 4.5, otPay: 90.0, notes: "" },
+          { dateIn: "05/08/2026", timeIn: "08:00", dateOut: "05/08/2026", timeOut: "21:00", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: 13.0, otHrs: 4.0, otPay: 80.0, notes: "" },
+          { dateIn: "06/08/2026", timeIn: "09:30", dateOut: "06/08/2026", timeOut: "23:00", day: "Thu", type: "Permanent", name: "Roslan bin Sharif", totHrs: 13.5, otHrs: 4.5, otPay: 90.0, notes: "" },
+          { dateIn: "07/08/2026", timeIn: "", dateOut: "", timeOut: "", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "08/08/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "09/08/2026", timeIn: "16:00", dateOut: "09/08/2026", timeOut: "00:00", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: 8.0, otHrs: "", otPay: 160.0, notes: "Off Day" },
+          { dateIn: "10/08/2026", timeIn: "", dateOut: "", timeOut: "", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "11/08/2026", timeIn: "08:00", dateOut: "11/08/2026", timeOut: "20:30", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: 12.5, otHrs: 3.5, otPay: 70.0, notes: "" },
+          { dateIn: "12/08/2026", timeIn: "10:00", dateOut: "12/08/2026", timeOut: "22:30", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: 12.5, otHrs: 3.5, otPay: 70.0, notes: "" },
+          { dateIn: "13/08/2026", timeIn: "08:00", dateOut: "13/08/2026", timeOut: "01:30", day: "Thu", type: "Permanent", name: "Roslan bin Sharif", totHrs: 17.5, otHrs: 8.5, otPay: 170.0, notes: "" },
+          { dateIn: "14/08/2026", timeIn: "", dateOut: "", timeOut: "", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "15/08/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "16/08/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "17/08/2026", timeIn: "09:30", dateOut: "17/08/2026", timeOut: "20:30", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: 11.0, otHrs: 2.0, otPay: 40.0, notes: "" },
+          { dateIn: "18/08/2026", timeIn: "", dateOut: "", timeOut: "", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "19/08/2026", timeIn: "09:00", dateOut: "19/08/2026", timeOut: "23:30", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: 14.5, otHrs: 5.5, otPay: 110.0, notes: "" },
+          { dateIn: "20/08/2026", timeIn: "", dateOut: "", timeOut: "", day: "Thu", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "21/08/2026", timeIn: "09:00", dateOut: "21/08/2026", timeOut: "05:00", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: 20.0, otHrs: 11.0, otPay: 220.0, notes: "" },
+          { dateIn: "22/08/2026", timeIn: "14:00", dateOut: "22/08/2026", timeOut: "22:00", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: 8.0, otHrs: "", otPay: 160.0, notes: "Off Day" },
+          { dateIn: "23/08/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" }
+        ],
+        partTimers: []
+      },
+      "0926": {
+        summary: { basic: 3030, meal: 650, phone: 100, otPay: 1489.98, gross: 5269.98, ptHours: 0, ptPay: 0 },
+        // Actual rows from sheet 0926
+        timesheet: [
+          { dateIn: "24/08/2026", timeIn: "09:30", dateOut: "24/08/2026", timeOut: "22:30", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: 13.0, otHrs: 4.0, otPay: 80.0, notes: "" },
+          { dateIn: "25/08/2026", timeIn: "10:30", dateOut: "25/08/2026", timeOut: "22:00", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: 11.5, otHrs: 2.5, otPay: 280.0, notes: "PH - Prophet Muhammad's Birthday" },
+          { dateIn: "26/08/2026", timeIn: "09:00", dateOut: "26/08/2026", timeOut: "18:00", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: 9.0, otHrs: 0, otPay: 0, notes: "" },
+          { dateIn: "27/08/2026", timeIn: "10:00", dateOut: "27/08/2026", timeOut: "22:00", day: "Thu", type: "Permanent", name: "Roslan bin Sharif", totHrs: 12.0, otHrs: 3.0, otPay: 60.0, notes: "" },
+          { dateIn: "28/08/2026", timeIn: "09:00", dateOut: "28/08/2026", timeOut: "18:00", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: 9.0, otHrs: 0, otPay: 0, notes: "" },
+          { dateIn: "29/08/2026", timeIn: "10:30", dateOut: "29/08/2026", timeOut: "23:59", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: 13.5, otHrs: 4.5, otPay: 359.99, notes: "Off Day" },
+          { dateIn: "30/08/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "31/08/2026", timeIn: "", dateOut: "", timeOut: "", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "PH - Merdeka Day" },
+          { dateIn: "01/09/2026", timeIn: "08:30", dateOut: "01/09/2026", timeOut: "23:30", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: 15.0, otHrs: 6.0, otPay: 120.0, notes: "" },
+          { dateIn: "02/09/2026", timeIn: "10:00", dateOut: "02/09/2026", timeOut: "23:59", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: 14.0, otHrs: 5.0, otPay: 99.99, notes: "" },
+          { dateIn: "03/09/2026", timeIn: "08:00", dateOut: "03/09/2026", timeOut: "21:30", day: "Thu", type: "Permanent", name: "Roslan bin Sharif", totHrs: 13.5, otHrs: 4.5, otPay: 90.0, notes: "" },
+          { dateIn: "04/09/2026", timeIn: "10:00", dateOut: "05/09/2026", timeOut: "03:00", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: 17.0, otHrs: 8.0, otPay: 160.0, notes: "" },
+          { dateIn: "05/09/2026", timeIn: "10:30", dateOut: "05/09/2026", timeOut: "18:30", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: 8.0, otHrs: 0, otPay: 160.0, notes: "Off Day" },
+          { dateIn: "06/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "07/09/2026", timeIn: "09:00", dateOut: "07/09/2026", timeOut: "18:00", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: 9.0, otHrs: 0, otPay: 0, notes: "" },
+          { dateIn: "08/09/2026", timeIn: "08:30", dateOut: "08/09/2026", timeOut: "21:30", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: 13.0, otHrs: 4.0, otPay: 80.0, notes: "" },
+          { dateIn: "09/09/2026", timeIn: "09:00", dateOut: "09/09/2026", timeOut: "18:00", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: 9.0, otHrs: 0, otPay: 0, notes: "" },
+          { dateIn: "10/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Thu", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "11/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "12/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "13/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "14/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "15/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "16/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "PH - Malaysia Day" },
+          { dateIn: "17/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Thu", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "18/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "19/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "20/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "21/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "22/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "23/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" }
+        ],
+        partTimers: []
+      },
+      "1026": {
+        summary: { basic: 3030, meal: 650, phone: 100, otPay: 0, gross: 3780, ptHours: 0, ptPay: 0 },
+        // Actual rows from sheet 1026: template dates prepped, hours/punch left blank
+        timesheet: [
+          { dateIn: "24/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Thu", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "25/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "26/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "27/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "28/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "29/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "30/09/2026", timeIn: "", dateOut: "", timeOut: "", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "01/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Thu", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "02/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "03/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "04/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "05/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "06/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "07/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "08/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Thu", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "09/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "10/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "11/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "12/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "13/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "14/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "15/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Thu", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "16/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "17/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "18/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "19/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "20/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "21/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "22/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Thu", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "23/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" }
+        ],
+        partTimers: []
+      },
+      "1126": {
+        summary: { basic: 3030, meal: 650, phone: 100, otPay: 0, gross: 3780, ptHours: 0, ptPay: 0 },
+        timesheet: [
+          { dateIn: "24/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "25/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "26/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "27/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "28/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "29/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Thu", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "30/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "31/10/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "01/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "02/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "03/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "04/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "05/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Thu", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "06/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "07/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "08/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "09/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "10/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "11/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "12/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Thu", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "13/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "14/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "15/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "16/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "17/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "18/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "19/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Thu", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "20/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "21/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "22/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "23/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" }
+        ],
+        partTimers: []
+      },
+      "1226": {
+        summary: { basic: 3030, meal: 650, phone: 100, otPay: 0, gross: 3780, ptHours: 0, ptPay: 0 },
+        timesheet: [
+          { dateIn: "24/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "25/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "26/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Thu", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "27/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "28/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "29/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "30/11/2026", timeIn: "", dateOut: "", timeOut: "", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "01/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "02/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "03/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Thu", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "04/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "05/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "06/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "07/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "08/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "09/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "10/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Thu", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "11/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "12/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "13/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "14/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "15/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "16/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "17/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Thu", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "18/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Fri", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "19/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sat", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "20/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Sun", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "Off Day" },
+          { dateIn: "21/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Mon", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "22/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Tue", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" },
+          { dateIn: "23/12/2026", timeIn: "", dateOut: "", timeOut: "", day: "Wed", type: "Permanent", name: "Roslan bin Sharif", totHrs: "", otHrs: "", otPay: "", notes: "" }
+        ],
+        partTimers: []
+      }
+    };
+
+    function formatRM(val) {
+      if (val === "" || val === null || val === undefined) return "";
+      return "RM " + Number(val).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function switchMonth(sheetKey) {
+      // 1. Update Tab button styles
+      Object.keys(cycleMeta).forEach(key => {
+        const btn = document.getElementById(`tab-${key}`);
+        if (key === sheetKey) {
+          btn.className = "px-4 py-2 rounded-xl text-xs font-extrabold bg-blue-900 text-white shadow-sm border border-blue-900 transition-all";
+        } else {
+          btn.className = "px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-slate-200 transition-all";
+        }
+      });
+
+      // 2. Set Cycle range text
+      document.getElementById("cycleRangeText").textContent = cycleMeta[sheetKey].label;
+
+      // 3. Update Summary cards
+      const data = payrollData[sheetKey];
+      const s = data.summary;
+
+      document.getElementById("permBasic").textContent = formatRM(s.basic);
+      document.getElementById("permMeal").textContent = formatRM(s.meal);
+      document.getElementById("permPhone").textContent = formatRM(s.phone);
+      document.getElementById("permOT").textContent = formatRM(s.otPay);
+      document.getElementById("permGross").textContent = formatRM(s.gross);
+
+      document.getElementById("ptHeadcount").textContent = `${data.partTimers.length} pax`;
+      document.getElementById("ptHours").textContent = `${s.ptHours.toFixed(1)} hrs`;
+      document.getElementById("ptTotalPay").textContent = formatRM(s.ptPay);
+
+      document.getElementById("combPerm").textContent = formatRM(s.gross);
+      document.getElementById("combPT").textContent = formatRM(s.ptPay);
+      document.getElementById("combTotal").textContent = formatRM(s.gross + s.ptPay);
+
+      // 4. Render Roslan Timesheet rows
+      const tbody = document.getElementById("roslanTableBody");
+      tbody.innerHTML = "";
+
+      let sumTotalHrs = 0;
+      let sumOtHrs = 0;
+      let sumOtPay = 0;
+
+      data.timesheet.forEach(r => {
+        if (typeof r.totHrs === "number") sumTotalHrs += r.totHrs;
+        if (typeof r.otHrs === "number") sumOtHrs += r.otHrs;
+        if (typeof r.otPay === "number") sumOtPay += r.otPay;
+
+        const isHoliday = r.notes.includes("PH");
+        const isOffDay = r.notes.includes("Off Day");
+        const rowBg = isHoliday ? "bg-amber-50/50" : (isOffDay ? "bg-slate-50/40" : "hover:bg-slate-50/80");
+
+        tbody.innerHTML += `
+          <tr class="${rowBg} transition-colors">
+            <td class="py-2.5 px-3 font-semibold text-slate-900 whitespace-nowrap">${r.dateIn || ""}</td>
+            <td class="py-2.5 px-3 text-center text-slate-600 font-mono text-[11px]">${r.timeIn || ""}</td>
+            <td class="py-2.5 px-3 text-slate-500 whitespace-nowrap">${r.dateOut || ""}</td>
+            <td class="py-2.5 px-3 text-center text-slate-600 font-mono text-[11px]">${r.timeOut || ""}</td>
+            <td class="py-2.5 px-2 text-center font-medium ${isOffDay ? 'text-amber-700 font-bold' : 'text-slate-600'}">${r.day || ""}</td>
+            <td class="py-2.5 px-3 text-slate-500">Permanent</td>
+            <td class="py-2.5 px-3 font-medium text-slate-800">${r.name}</td>
+            <td class="py-2.5 px-3 text-right font-semibold text-slate-700">${typeof r.totHrs === "number" ? r.totHrs.toFixed(1) : ""}</td>
+            <td class="py-2.5 px-3 text-right font-semibold text-blue-700">${typeof r.otHrs === "number" ? r.otHrs.toFixed(1) : ""}</td>
+            <td class="py-2.5 px-3 text-right font-bold ${typeof r.otPay === "number" && r.otPay > 0 ? 'text-indigo-600' : 'text-slate-400'}">${typeof r.otPay === "number" && r.otPay > 0 ? r.otPay.toFixed(2) : (r.otPay === 0 ? "0.00" : "")}</td>
+            <td class="py-2.5 px-3">
+              ${r.notes ? `<span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold ${isHoliday ? 'bg-amber-100 text-amber-800' : 'bg-slate-200 text-slate-700'}">${r.notes}</span>` : ""}
+            </td>
+          </tr>
+        `;
+      });
+
+      // 5. Update Timesheet Footers
+      document.getElementById("footTotHours").textContent = sumTotalHrs.toFixed(1);
+      document.getElementById("footOtHours").textContent = sumOtHrs.toFixed(1);
+      document.getElementById("footOtEarnings").textContent = formatRM(sumOtPay);
+
+      // 6. Render Part-Time Table (Blank when no data)
+      const ptTbody = document.getElementById("ptTableBody");
+      ptTbody.innerHTML = "";
+
+      if (data.partTimers.length === 0) {
+        ptTbody.innerHTML = `
+          <tr>
+            <td colspan="11" class="py-8 text-center text-slate-400 bg-slate-50/50">
+              <i class="fas fa-inbox text-slate-300 text-2xl block mb-2"></i>
+              No ad-hoc part-time driver hours or wages recorded for cycle <strong>${sheetKey}</strong>.
+            </td>
+          </tr>
+        `;
+      } else {
+        data.partTimers.forEach(p => {
+          ptTbody.innerHTML += `
+            <tr class="hover:bg-slate-50/80 transition-colors">
+              <td class="py-2.5 px-3 font-semibold text-slate-900">${p.dateIn || ""}</td>
+              <td class="py-2.5 px-3 text-center text-slate-600 font-mono text-[11px]">${p.timeIn || ""}</td>
+              <td class="py-2.5 px-3 text-slate-500">${p.dateOut || ""}</td>
+              <td class="py-2.5 px-3 text-center text-slate-600 font-mono text-[11px]">${p.timeOut || ""}</td>
+              <td class="py-2.5 px-2 text-center font-medium">${p.day || ""}</td>
+              <td class="py-2.5 px-3 text-slate-500">Part-Time</td>
+              <td class="py-2.5 px-3 font-medium text-slate-800">${p.name || ""}</td>
+              <td class="py-2.5 px-3 text-right font-semibold">${p.totHrs || ""}</td>
+              <td class="py-2.5 px-3 text-right font-semibold text-blue-700">${p.otHrs || ""}</td>
+              <td class="py-2.5 px-3 text-right font-bold text-amber-800">${formatRM(p.otPay)}</td>
+              <td class="py-2.5 px-3 text-slate-400">${p.notes || ""}</td>
+            </tr>
+          `;
+        });
+      }
+    }
+
+    // Initialize with August (0826) as default view
+    document.addEventListener("DOMContentLoaded", () => {
+      switchMonth("0826");
+    });
+  </script>
+</body>
+</html>
