@@ -3,537 +3,628 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Executive Payroll Dashboard - Board Presentation</title>
-    
-    <!-- Tailwind CSS -->
+    <title>Executive Payroll Report | As of August 2026</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Chart.js -->
+    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            500: '#0ea5e9',
-                            700: '#0369a1',
-                            900: '#0c4a6e',
-                        },
-                        corporate: '#0f172a',
-                        savers: '#3b82f6',     // Blue
-                        redbrick: '#ef4444',   // Red
-                        h2go: '#10b981'        // Green
-                    }
-                }
-            }
-        }
-    </script>
-    
+    <!-- FontAwesome CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f1f5f9; }
-        .glass-card {
-            background: #ffffff;
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.05), 0 4px 6px -2px rgba(15, 23, 42, 0.025);
-            border-radius: 1rem;
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
         }
-        .chart-wrapper { position: relative; height: 100%; width: 100%; min-height: 300px; }
-        
-        /* Entrance Animations */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
+        .card-shadow {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+            transition: all 0.25s ease;
         }
-        .animate-fade-in { animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
-        .delay-100 { animation-delay: 100ms; }
-        .delay-200 { animation-delay: 200ms; }
-        .delay-300 { animation-delay: 300ms; }
-
-        /* Print styles */
-        @media print {
-            body { background-color: #ffffff; padding: 0; margin: 0; }
-            .no-print { display: none !important; }
-            .glass-card { box-shadow: none; border: 1px solid #cbd5e1; page-break-inside: avoid; }
-            .grid { page-break-inside: avoid; }
+        .card-shadow:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+            transform: translateY(-2px);
         }
-        
-        /* Custom Scrollbar for table */
-        ::-webkit-scrollbar { height: 8px; width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        /* Custom scrollbar for table overflow */
+        .table-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        .table-container::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 9999px;
+        }
     </style>
 </head>
-<body class="text-slate-800 font-sans antialiased p-4 md:p-6 lg:p-8">
+<body class="antialiased min-h-screen p-4 sm:p-6 lg:p-10">
 
-    <div class="max-w-[1400px] mx-auto">
-        <header class="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-8 gap-6 animate-fade-in">
+    <div class="max-w-7xl mx-auto space-y-6">
+
+        <!-- Header -->
+        <header class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 card-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-                <div class="flex items-center gap-3 mb-2 flex-wrap">
-                    <span class="bg-brand-100 text-brand-700 px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase">Board Presentation</span>
-                    <span class="text-slate-500 text-sm font-medium"><i class="far fa-calendar-alt mr-1"></i> August 2026</span>
-                    <span class="text-slate-500 text-sm font-medium border-l border-slate-300 pl-3"><i class="fas fa-clock mr-1"></i> Cut-off: 16th | Payout: End of Month</span>
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 mb-2">
+                    <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+                    Board of Directors Presentation
                 </div>
-                <h1 class="text-3xl md:text-4xl font-extrabold text-corporate tracking-tight">Executive Payroll Dashboard</h1>
-                <p class="text-slate-500 mt-2 text-lg">Centralized analysis of distinct salary breakdowns across Group Entities.</p>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Group Payroll Summary Report</h1>
+                <p class="text-slate-500 text-sm mt-1">Consolidated multi-entity payroll analysis • <strong>Data as of August 2026</strong></p>
+            </div>
+
+            <!-- Policy Box -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-center gap-3 w-full md:w-auto">
+                <div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                    <i class="fas fa-calendar-check text-lg"></i>
+                </div>
+                <div>
+                    <div class="text-xs font-bold uppercase tracking-wider text-amber-900">Standard Payroll Cycle</div>
+                    <div class="text-xs text-amber-800 font-medium">
+                        Cut-off: <strong>16th</strong> of month &bull; Salary Credited: <strong>28th</strong> of month
+                    </div>
+                </div>
             </div>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-fade-in delay-100">
-            <!-- Total Gross -->
-            <div class="glass-card p-6 flex flex-col justify-between border-t-4 border-t-brand-500">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-sm font-bold text-slate-500 uppercase tracking-wide">Group Gross Payroll</p>
-                        <h2 class="text-3xl font-extrabold text-corporate mt-2" id="kpi-gross">RM0</h2>
-                    </div>
-                    <div class="w-10 h-10 rounded-lg bg-brand-50 flex items-center justify-center text-brand-500">
-                        <i class="fas fa-money-check-alt text-lg"></i>
-                    </div>
+        <!-- KPI Metrics Grid -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold tracking-wider text-slate-500 uppercase">Total YTD Payroll Gross</span>
+                    <span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-sm"><i class="fas fa-money-bill-wave"></i></span>
                 </div>
-                <div class="mt-4 flex items-center text-sm font-semibold text-slate-500">
-                    <i class="far fa-calendar-alt mr-1"></i> August Total
-                </div>
+                <div class="text-2xl font-bold text-slate-900 mt-2">RM 178,670.00</div>
+                <p class="text-xs text-slate-500 mt-1">8 Months (Jan – Aug 2026)</p>
             </div>
 
-            <!-- Total Net -->
-            <div class="glass-card p-6 flex flex-col justify-between border-t-4 border-t-emerald-500">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-sm font-bold text-slate-500 uppercase tracking-wide">Group Net Payout</p>
-                        <h2 class="text-3xl font-extrabold text-corporate mt-2" id="kpi-net">RM0</h2>
-                    </div>
-                    <div class="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-500">
-                        <i class="fas fa-wallet text-lg"></i>
-                    </div>
+            <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold tracking-wider text-slate-500 uppercase">Total Headcount</span>
+                    <span class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm"><i class="fas fa-users"></i></span>
                 </div>
-                <div class="mt-4 flex items-center text-sm font-semibold text-slate-500">
-                    <i class="fas fa-info-circle mr-1"></i> Actual cash disbursement
-                </div>
+                <div class="text-2xl font-bold text-slate-900 mt-2">4 Persons</div>
+                <p class="text-xs text-slate-500 mt-1">Across 3 Operating Entities</p>
             </div>
 
-            <!-- Total Deductions -->
-            <div class="glass-card p-6 flex flex-col justify-between border-t-4 border-t-rose-500">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-sm font-bold text-slate-500 uppercase tracking-wide">Total Deductions</p>
-                        <h2 class="text-3xl font-extrabold text-corporate mt-2" id="kpi-deductions">RM0</h2>
-                    </div>
-                    <div class="w-10 h-10 rounded-lg bg-rose-50 flex items-center justify-center text-rose-500">
-                        <i class="fas fa-file-invoice-dollar text-lg"></i>
-                    </div>
+            <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold tracking-wider text-slate-500 uppercase">YTD Overtime Cost</span>
+                    <span class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm"><i class="fas fa-clock"></i></span>
                 </div>
-                <div class="mt-4 flex items-center text-sm font-semibold text-slate-500">
-                    <i class="fas fa-building text-slate-400 mr-1"></i> Statutory & Tax Withholdings
-                </div>
+                <div class="text-2xl font-bold text-slate-900 mt-2">RM 14,030.00</div>
+                <p class="text-xs text-slate-500 mt-1">H20 Savers Sdn Bhd</p>
             </div>
 
-            <!-- Total Headcount -->
-            <div class="glass-card p-6 flex flex-col justify-between border-t-4 border-t-purple-500">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-sm font-bold text-slate-500 uppercase tracking-wide">Total Headcount</p>
-                        <h2 class="text-3xl font-extrabold text-corporate mt-2" id="kpi-headcount">0</h2>
-                    </div>
-                    <div class="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center text-purple-500">
-                        <i class="fas fa-users text-lg"></i>
-                    </div>
+            <div class="bg-white border border-slate-200 rounded-2xl p-5 card-shadow">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold tracking-wider text-slate-500 uppercase">YTD Statutory Deductions</span>
+                    <span class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center text-sm"><i class="fas fa-file-invoice-dollar"></i></span>
                 </div>
-                <div class="mt-4 flex items-center text-sm font-semibold text-slate-500">
-                    <i class="fas fa-network-wired text-slate-400 mr-1"></i> Across all 3 entities
-                </div>
+                <div class="text-2xl font-bold text-slate-900 mt-2">RM 15,788.00</div>
+                <p class="text-xs text-slate-500 mt-1">Red Brick Capital (RM 1,973.50/mth)</p>
             </div>
-        </div>
+        </section>
 
-        <h3 class="text-xl font-bold text-corporate mb-4 animate-fade-in delay-200">Entity Salary Breakdowns</h3>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 animate-fade-in delay-200" id="entity-cards-container">
-            <!-- Populated via JS to ensure exact formula tracking -->
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 animate-fade-in delay-300">
-            <!-- Stacked Bar Chart: Explaining the composition visually -->
-            <div class="glass-card p-6 flex flex-col">
-                <div class="mb-6">
-                    <h3 class="text-lg font-bold text-corporate">Gross Salary Composition by Entity</h3>
-                    <p class="text-sm text-slate-500 mt-1">Visualizing the weight of Basic, Allowances, and Overtime.</p>
-                </div>
-                <div class="chart-wrapper flex-grow min-h-[350px]">
-                    <canvas id="compositionChart"></canvas>
-                </div>
-            </div>
-            
-            <!-- Line Chart: Trend -->
-            <div class="glass-card p-6 flex flex-col">
-                <div class="mb-6 flex justify-between items-start">
-                    <div>
-                        <h3 class="text-lg font-bold text-corporate">2026 Net Payout Trend (Jan - Aug)</h3>
-                        <p class="text-sm text-slate-500 mt-1">Interactive timeline. Click on points or legends to explore.</p>
-                    </div>
-                </div>
-                <div class="chart-wrapper flex-grow min-h-[350px]">
-                    <canvas id="trendChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <div class="glass-card overflow-hidden mb-12 animate-fade-in delay-300">
-            <div class="p-6 border-b border-slate-200 bg-slate-50/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <!-- Chart Section -->
+        <section class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 card-shadow">
+            <div class="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-slate-100 gap-4">
                 <div>
-                    <h3 class="text-lg font-bold text-corporate">Centralized Payroll Master Data</h3>
-                    <p class="text-sm text-slate-500 mt-1">Data preserved directly from source Excel files.</p>
+                    <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fas fa-chart-column text-blue-600"></i> Monthly Cost Trends (RM)
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-0.5">Click quarters below to toggle timeframes dynamically</p>
                 </div>
-                <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-3 py-1.5 rounded-full border border-emerald-200 shadow-sm flex items-center">
-                    <i class="fas fa-check-circle mr-1.5"></i> Formulas Verified
-                </span>
+
+                <!-- Interactive Filters -->
+                <div class="inline-flex p-1 bg-slate-100 rounded-xl border border-slate-200 text-xs font-semibold gap-1">
+                    <button onclick="setPeriod('YTD')" id="btn-YTD" class="px-3.5 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm border border-slate-200 transition-all font-bold">Jan - Aug (YTD)</button>
+                    <button onclick="setPeriod('Q1')" id="btn-Q1" class="px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all font-medium">Q1</button>
+                    <button onclick="setPeriod('Q2')" id="btn-Q2" class="px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all font-medium">Q2</button>
+                    <button onclick="setPeriod('Q3')" id="btn-Q3" class="px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all font-medium">Q3</button>
+                    <button onclick="setPeriod('Q4')" id="btn-Q4" class="px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all font-medium">Q4</button>
+                </div>
             </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse whitespace-nowrap">
+
+            <!-- Canvas Container -->
+            <div class="relative mt-6 h-80 sm:h-96 w-full">
+                <canvas id="payrollChart"></canvas>
+                <div id="q4Notice" class="hidden absolute inset-0 bg-slate-50/90 backdrop-blur-xs rounded-xl flex flex-col items-center justify-center text-center p-4">
+                    <div class="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 mb-2">
+                        <i class="fas fa-calendar-xmark text-xl"></i>
+                    </div>
+                    <p class="text-sm font-bold text-slate-800">No Data Available for Q4 2026</p>
+                    <p class="text-xs text-slate-500 mt-1 max-w-sm">This presentation is prepared as of August 2026. September to December figures have not yet materialized.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Company Cards Grid -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <!-- Company 1 -->
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+                                <i class="fas fa-droplet text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base leading-tight">H20 Savers Sdn Bhd</h3>
+                                <span class="inline-block mt-0.5 text-[11px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
+                                    Contract for Service
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 space-y-2.5 text-xs">
+                        <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Headcount</span><span class="font-semibold text-slate-800">1 pax</span></div>
+                        <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Employed Since</span><span class="font-semibold text-slate-800">01 January 2026</span></div>
+                        <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Monthly Basic</span><span class="font-semibold text-slate-800">RM 3,030.00</span></div>
+                        <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Fix Allowance</span><span class="font-semibold text-slate-800">RM 650 + RM 100 (= RM 750)</span></div>
+                        <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Statutory Deductions</span><span class="font-semibold text-slate-500">None</span></div>
+                    </div>
+
+                    <!-- OT Subtable -->
+                    <div class="mt-4 p-3 bg-slate-50 rounded-xl border border-slate-100">
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-2 flex items-center justify-between">
+                            <span>Overtime Record (RM)</span>
+                            <span class="text-blue-600 font-bold">Total: 14,030</span>
+                        </p>
+                        <div class="grid grid-cols-4 gap-1.5 text-center text-[11px]">
+                            <div class="bg-white p-1 rounded border border-slate-200">Jan <br><strong class="text-slate-800">1,980</strong></div>
+                            <div class="bg-white p-1 rounded border border-slate-200">Feb <br><strong class="text-slate-800">1,840</strong></div>
+                            <div class="bg-white p-1 rounded border border-slate-200">Mar <br><strong class="text-slate-800">2,160</strong></div>
+                            <div class="bg-white p-1 rounded border border-slate-200 text-amber-700">Apr <br><strong>90</strong></div>
+                            <div class="bg-white p-1 rounded border border-slate-200">May <br><strong class="text-slate-800">1,340</strong></div>
+                            <div class="bg-white p-1 rounded border border-slate-200">Jun <br><strong class="text-slate-800">1,900</strong></div>
+                            <div class="bg-white p-1 rounded border border-slate-200 text-emerald-700">Jul <br><strong>2,600</strong></div>
+                            <div class="bg-white p-1 rounded border border-slate-200">Aug <br><strong class="text-slate-800">2,200</strong></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5 pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
+                    <span class="text-slate-500 font-medium">8-Month Total Cost:</span>
+                    <span class="font-bold text-slate-900 text-sm">RM 44,270.00</span>
+                </div>
+            </div>
+
+            <!-- Company 2 -->
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold">
+                                <i class="fas fa-building text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base leading-tight">Red Brick Capital Sdn Bhd</h3>
+                                <span class="inline-block mt-0.5 text-[11px] font-semibold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-100">
+                                    Permanent Employee
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 space-y-2.5 text-xs">
+                        <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Headcount</span><span class="font-semibold text-slate-800">1 pax</span></div>
+                        <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Employed Since</span><span class="font-semibold text-slate-800">01 January 2026</span></div>
+                        <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Monthly Basic</span><span class="font-semibold text-slate-800">RM 8,000.00</span></div>
+                        <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Fix Allowance</span><span class="font-semibold text-slate-800">RM 2,300.00</span></div>
+                        <div class="flex justify-between py-1 border-b border-slate-50 font-medium"><span class="text-slate-700">Gross Payable / Month</span><span class="font-bold text-slate-900">RM 10,300.00</span></div>
+                    </div>
+
+                    <!-- Statutory Deductions Subtable -->
+                    <div class="mt-4 p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs">
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-2">Monthly Statutory Deductions</p>
+                        <div class="space-y-1.5 text-slate-600">
+                            <div class="flex justify-between"><span>EPF (KWSP)</span><span class="font-medium text-slate-800">RM 1,133.00</span></div>
+                            <div class="flex justify-between"><span>PCB (LHDN)</span><span class="font-medium text-slate-800">RM 754.20</span></div>
+                            <div class="flex justify-between"><span>SOCSO (PERKESO)</span><span class="font-medium text-slate-800">RM 74.40</span></div>
+                            <div class="flex justify-between"><span>EIS (SIP)</span><span class="font-medium text-slate-800">RM 11.90</span></div>
+                            <div class="pt-1.5 border-t border-slate-200 flex justify-between font-bold text-rose-600">
+                                <span>Total Deduction:</span>
+                                <span>RM 1,973.50</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5 pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
+                    <span class="text-slate-500 font-medium">8-Month Gross Cost:</span>
+                    <span class="font-bold text-slate-900 text-sm">RM 82,400.00</span>
+                </div>
+            </div>
+
+            <!-- Company 3 -->
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 card-shadow flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold">
+                                <i class="fas fa-globe text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base leading-tight">H2GO Global Sdn Bhd</h3>
+                                <span class="inline-block mt-0.5 text-[11px] font-semibold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-md border border-teal-100">
+                                    Contract for Service
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 space-y-2.5 text-xs">
+                        <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Total Headcount</span><span class="font-semibold text-slate-800">2 pax</span></div>
+                        <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Contract Tenure</span><span class="font-semibold text-slate-800">01 Jan 2026 – 04 Sep 2026</span></div>
+                        <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Statutory Deductions</span><span class="font-semibold text-slate-500">None</span></div>
+                    </div>
+
+                    <!-- Individual Headcount Cards -->
+                    <div class="mt-4 space-y-2 text-xs">
+                        <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="font-bold text-slate-800"><i class="fas fa-user text-teal-600 mr-1.5"></i>Employee 1</span>
+                                <span class="font-bold text-slate-900">RM 5,500 / mo</span>
+                            </div>
+                            <div class="text-slate-500 flex justify-between text-[11px]">
+                                <span>Fix Allowance: None</span>
+                                <span>RM 44,000 (8 mos)</span>
+                            </div>
+                        </div>
+
+                        <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="font-bold text-slate-800"><i class="fas fa-user text-teal-600 mr-1.5"></i>Employee 2</span>
+                                <span class="font-bold text-slate-900">RM 1,000 / mo</span>
+                            </div>
+                            <div class="text-slate-500 flex justify-between text-[11px]">
+                                <span>Fix Allowance: None</span>
+                                <span>RM 8,000 (8 mos)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5 pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
+                    <span class="text-slate-500 font-medium">8-Month Total Cost:</span>
+                    <span class="font-bold text-slate-900 text-sm">RM 52,000.00</span>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Master Data Table Section -->
+        <section class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 card-shadow">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-100 gap-2">
+                <div>
+                    <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-2.5">
+                        <i class="fas fa-table-list text-blue-600"></i> Centralized Payroll Master Data
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-1">Consolidated 8-month payroll register (Jan – Aug 2026) with full statutory breakdown</p>
+                </div>
+                <div class="text-xs text-slate-500 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200 font-medium self-start sm:self-auto">
+                    All figures in Ringgit Malaysia (RM)
+                </div>
+            </div>
+
+            <div class="overflow-x-auto table-container mt-4">
+                <table class="w-full text-left border-collapse min-w-[900px]">
                     <thead>
-                        <tr class="bg-slate-100 text-slate-500 text-xs uppercase tracking-widest">
-                            <th class="p-4 font-bold border-b border-slate-200">Entity Details</th>
-                            <th class="p-4 font-bold border-b border-slate-200 text-right">Headcount</th>
-                            <th class="p-4 font-bold border-b border-slate-200 text-right">Basic Pay</th>
-                            <th class="p-4 font-bold border-b border-slate-200 text-right">Allowances</th>
-                            <th class="p-4 font-bold border-b border-slate-200 text-right">Overtime</th>
-                            <th class="p-4 font-bold border-b border-slate-200 text-right bg-brand-50 text-brand-900 border-l border-brand-100">Gross Pay</th>
-                            <th class="p-4 font-bold border-b border-slate-200 text-right">Deductions</th>
-                            <th class="p-4 font-bold border-b border-slate-200 text-right bg-emerald-50 text-emerald-900 border-l border-emerald-100">Net Payout</th>
+                        <tr class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-600 border-b border-slate-200">
+                            <th class="py-3 px-4">ENTITY DETAILS</th>
+                            <th class="py-3 px-3 text-center">HEADCOUNT</th>
+                            <th class="py-3 px-4 text-right">BASIC PAY</th>
+                            <th class="py-3 px-4 text-right">ALLOWANCES</th>
+                            <th class="py-3 px-4 text-right">OVERTIME</th>
+                            <th class="py-3 px-4 text-right">GROSS PAY</th>
+                            <th class="py-3 px-4 text-right">DEDUCTIONS</th>
+                            <th class="py-3 px-4 text-right">NET PAYOUT</th>
                         </tr>
                     </thead>
-                    <tbody id="payroll-table-body" class="text-sm">
-                        <!-- Populated via JS -->
+                    <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+                        <!-- Company 1 -->
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-4 px-4 font-semibold text-slate-900">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+                                    <div>
+                                        <span>H20 Savers Sdn Bhd</span>
+                                        <div class="text-[10px] text-slate-400 font-normal">Contract for Service &bull; Since 01/01/2026</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-3 text-center font-bold text-slate-800">1</td>
+                            <td class="py-4 px-4 text-right">
+                                <div class="font-bold text-slate-900">24,240.00</div>
+                                <div class="text-[10px] text-slate-400">3,030.00 / mo</div>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <div class="font-bold text-slate-900">6,000.00</div>
+                                <div class="text-[10px] text-slate-400">750.00 / mo</div>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <div class="font-bold text-indigo-600">14,030.00</div>
+                                <div class="text-[10px] text-slate-400">Total 8-mo OT</div>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <div class="font-bold text-slate-900">44,270.00</div>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <div class="font-medium text-slate-400">0.00</div>
+                                <div class="text-[10px] text-slate-400">No statutory</div>
+                            </td>
+                            <td class="py-4 px-4 text-right font-bold text-emerald-600">
+                                44,270.00
+                            </td>
+                        </tr>
+
+                        <!-- Company 2 -->
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-4 px-4 font-semibold text-slate-900">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                                    <div>
+                                        <span>Red Brick Capital Sdn Bhd</span>
+                                        <div class="text-[10px] text-slate-400 font-normal">Permanent Employee &bull; Since 01/01/2026</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-3 text-center font-bold text-slate-800">1</td>
+                            <td class="py-4 px-4 text-right">
+                                <div class="font-bold text-slate-900">64,000.00</div>
+                                <div class="text-[10px] text-slate-400">8,000.00 / mo</div>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <div class="font-bold text-slate-900">18,400.00</div>
+                                <div class="text-[10px] text-slate-400">2,300.00 / mo</div>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <div class="font-medium text-slate-400">0.00</div>
+                                <div class="text-[10px] text-slate-400">None</div>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <div class="font-bold text-slate-900">82,400.00</div>
+                                <div class="text-[10px] text-slate-400">10,300.00 / mo</div>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <div class="font-bold text-rose-600">15,788.00</div>
+                                <div class="text-[10px] text-slate-400">1,973.50 / mo</div>
+                            </td>
+                            <td class="py-4 px-4 text-right font-bold text-emerald-600">
+                                66,612.00
+                                <div class="text-[10px] text-slate-400 font-normal">8,326.50 / mo</div>
+                            </td>
+                        </tr>
+
+                        <!-- Company 3 - Emp 1 -->
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-4 px-4 font-semibold text-slate-900">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-teal-500"></span>
+                                    <div>
+                                        <span>H2GO Global Sdn Bhd (Employee 1)</span>
+                                        <div class="text-[10px] text-slate-400 font-normal">Contract for Service &bull; Jan – 04 Sep 2026</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-3 text-center font-bold text-slate-800">1</td>
+                            <td class="py-4 px-4 text-right">
+                                <div class="font-bold text-slate-900">44,000.00</div>
+                                <div class="text-[10px] text-slate-400">5,500.00 / mo</div>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <div class="font-medium text-slate-400">0.00</div>
+                                <div class="text-[10px] text-slate-400">None</div>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <div class="font-medium text-slate-400">0.00</div>
+                                <div class="text-[10px] text-slate-400">None</div>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <div class="font-bold text-slate-900">44,000.00</div>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <div class="font-medium text-slate-400">0.00</div>
+                                <div class="text-[10px] text-slate-400">No statutory</div>
+                            </td>
+                            <td class="py-4 px-4 text-right font-bold text-emerald-600">
+                                44,000.00
+                            </td>
+                        </tr>
+
+                        <!-- Company 3 - Emp 2 -->
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-4 px-4 font-semibold text-slate-900">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-teal-500"></span>
+                                    <div>
+                                        <span>H2GO Global Sdn Bhd (Employee 2)</span>
+                                        <div class="text-[10px] text-slate-400 font-normal">Contract for Service &bull; Jan – 04 Sep 2026</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-3 text-center font-bold text-slate-800">1</td>
+                            <td class="py-4 px-4 text-right">
+                                <div class="font-bold text-slate-900">8,000.00</div>
+                                <div class="text-[10px] text-slate-400">1,000.00 / mo</div>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <div class="font-medium text-slate-400">0.00</div>
+                                <div class="text-[10px] text-slate-400">None</div>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <div class="font-medium text-slate-400">0.00</div>
+                                <div class="text-[10px] text-slate-400">None</div>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <div class="font-bold text-slate-900">8,000.00</div>
+                            </td>
+                            <td class="py-4 px-4 text-right">
+                                <div class="font-medium text-slate-400">0.00</div>
+                                <div class="text-[10px] text-slate-400">No statutory</div>
+                            </td>
+                            <td class="py-4 px-4 text-right font-bold text-emerald-600">
+                                8,000.00
+                            </td>
+                        </tr>
                     </tbody>
-                    <tfoot class="bg-slate-800 font-bold text-white shadow-inner" id="payroll-table-foot">
-                        <!-- Populated via JS -->
+                    <tfoot>
+                        <tr class="bg-slate-100/80 border-t-2 border-slate-300 text-xs font-bold text-slate-900">
+                            <td class="py-4 px-4 uppercase tracking-wider">TOTAL GROUP SUMMARY</td>
+                            <td class="py-4 px-3 text-center text-sm font-extrabold text-blue-600">4</td>
+                            <td class="py-4 px-4 text-right font-extrabold">RM 140,240.00</td>
+                            <td class="py-4 px-4 text-right font-extrabold">RM 24,400.00</td>
+                            <td class="py-4 px-4 text-right font-extrabold text-indigo-600">RM 14,030.00</td>
+                            <td class="py-4 px-4 text-right font-extrabold text-slate-900">RM 178,670.00</td>
+                            <td class="py-4 px-4 text-right font-extrabold text-rose-600">RM 15,788.00</td>
+                            <td class="py-4 px-4 text-right font-extrabold text-emerald-600 text-sm">RM 162,882.00</td>
+                        </tr>
                     </tfoot>
                 </table>
             </div>
-        </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-xs text-slate-400 py-4">
+            Confidential &bull; Prepared for Board of Directors Review &bull; Malaysian Operations Compliance
+        </footer>
 
     </div>
 
+    <!-- Chart Configuration Script -->
     <script>
-        // ==========================================
-        // STRICT DATA CONFIGURATION & FORMULAS
-        // Gross = Basic + Allowances + Overtime
-        // Net = Gross - Deductions
-        // ==========================================
-        
-        const sourceData = [
-            { 
-                entity: "H20 Savers Sdn Bhd", 
-                sourceFile: "Payroll Summary_Savers.xls",
-                colorClass: "text-savers",
-                bgClass: "bg-blue-50",
-                barColor: "#3b82f6",
-                headcount: 1, 
-                basic: 3030, 
-                allowances: 750, // 650 + 100
-                overtime: 2200,  // Aug OT
-                deductions: 0    // Contract for Service
-            },
-            { 
-                entity: "Red Brick Capital Sdn Bhd", 
-                sourceFile: "Payroll Summary_Red Brick.xls",
-                colorClass: "text-redbrick",
-                bgClass: "bg-red-50",
-                barColor: "#ef4444",
-                headcount: 1, 
-                basic: 8000, 
-                allowances: 2300, 
-                overtime: 0, 
-                deductions: 1973.50 // EPF(1133), SOCSO(74.40), EIS(11.90), PCB(754.20)
-            },
-            { 
-                entity: "H2GO Global Sdn Bhd", 
-                sourceFile: "Monthly Payroll H2Go Global_Saver- Contract for Service_Staff Movement (5).xlsx",
-                colorClass: "text-h2go",
-                bgClass: "bg-emerald-50",
-                barColor: "#10b981",
-                headcount: 2, 
-                basic: 6500, // Emp 1 (5500) + Emp 2 (1000)
-                allowances: 0, 
-                overtime: 0, 
-                deductions: 0 // Contract for Service
-            }
-        ];
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August'];
 
-        // Format Currency dynamically
-        const formatRM = (amount) => {
-            return new Intl.NumberFormat('en-MY', { 
-                style: 'currency', 
-                currency: 'MYR',
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }).format(amount);
-        };
+        // H20 Savers: 3030 + 750 (RM650 + RM100) = RM 3,780 base + OT
+        const h20OT = [1980, 1840, 2160, 90, 1340, 1900, 2600, 2200];
+        const h20Total = h20OT.map(ot => 3780 + ot);
 
-        let totals = {
-            headcount: 0, basic: 0, allowances: 0, overtime: 0, 
-            gross: 0, deductions: 0, net: 0
-        };
+        // Red Brick Capital: RM 8,000 + RM 2,300 = RM 10,300 monthly gross
+        const redBrickTotal = Array(8).fill(10300);
 
-        // Strict Formula Execution
-        const processedData = sourceData.map(item => {
-            const gross = item.basic + item.allowances + item.overtime; // FORMULA: Gross
-            const net = gross - item.deductions;                        // FORMULA: Net
-            
-            // Calculate percentages for board explanation
-            const pctBasic = ((item.basic / gross) * 100).toFixed(1);
-            const pctAllowances = ((item.allowances / gross) * 100).toFixed(1);
-            const pctOvertime = ((item.overtime / gross) * 100).toFixed(1);
+        // H2GO Global: RM 5,500 + RM 1,000 = RM 6,500 monthly
+        const h2goTotal = Array(8).fill(6500);
 
-            // Accumulate Totals
-            totals.headcount += item.headcount;
-            totals.basic += item.basic;
-            totals.allowances += item.allowances;
-            totals.overtime += item.overtime;
-            totals.gross += gross;
-            totals.deductions += item.deductions;
-            totals.net += net;
-
-            return { ...item, gross, net, pctBasic, pctAllowances, pctOvertime };
-        });
-
-        // Update Top KPIs
-        document.getElementById('kpi-gross').innerText = formatRM(totals.gross);
-        document.getElementById('kpi-net').innerText = formatRM(totals.net);
-        document.getElementById('kpi-deductions').innerText = formatRM(totals.deductions);
-        document.getElementById('kpi-headcount').innerText = totals.headcount.toLocaleString();
-
-        // Populate Entity Specific Cards
-        const cardsContainer = document.getElementById('entity-cards-container');
-        processedData.forEach(row => {
-            const card = document.createElement('div');
-            card.className = "glass-card p-5";
-            card.innerHTML = `
-                <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
-                    <h4 class="text-lg font-extrabold text-corporate flex items-center">
-                        <i class="fas fa-building mr-2 ${row.colorClass}"></i> ${row.entity}
-                    </h4>
-                    <span class="text-xs font-bold bg-slate-100 text-slate-600 px-2 py-1 rounded">HC: ${row.headcount}</span>
-                </div>
-                
-                <div class="mb-4">
-                    <div class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Total Gross</div>
-                    <div class="text-2xl font-black ${row.colorClass}">${formatRM(row.gross)}</div>
-                </div>
-
-                <div class="space-y-3">
-                    <!-- Basic -->
-                    <div>
-                        <div class="flex justify-between text-xs mb-1">
-                            <span class="font-bold text-slate-600">Basic Pay</span>
-                            <span class="font-bold text-slate-400">${row.pctBasic}%</span>
-                        </div>
-                        <div class="w-full bg-slate-100 rounded-full h-2">
-                            <div class="${row.bgClass.replace('50', '500')} h-2 rounded-full" style="width: ${row.pctBasic}%"></div>
-                        </div>
-                    </div>
-                    <!-- Allowances -->
-                    <div>
-                        <div class="flex justify-between text-xs mb-1">
-                            <span class="font-bold text-slate-600">Allowances</span>
-                            <span class="font-bold text-slate-400">${row.pctAllowances}%</span>
-                        </div>
-                        <div class="w-full bg-slate-100 rounded-full h-2">
-                            <div class="bg-amber-400 h-2 rounded-full" style="width: ${row.pctAllowances}%"></div>
-                        </div>
-                    </div>
-                    <!-- Overtime -->
-                    <div>
-                        <div class="flex justify-between text-xs mb-1">
-                            <span class="font-bold text-slate-600">Overtime</span>
-                            <span class="font-bold text-slate-400">${row.pctOvertime}%</span>
-                        </div>
-                        <div class="w-full bg-slate-100 rounded-full h-2">
-                            <div class="bg-purple-400 h-2 rounded-full" style="width: ${row.pctOvertime}%"></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="mt-5 pt-4 border-t border-slate-100 flex justify-between items-center">
-                    <div class="text-xs text-slate-500 font-bold">Net Payout</div>
-                    <div class="text-lg font-extrabold text-slate-800">${formatRM(row.net)}</div>
-                </div>
-            `;
-            cardsContainer.appendChild(card);
-        });
-
-        // Populate Master Table
-        const tableBody = document.getElementById('payroll-table-body');
-        processedData.forEach((row, index) => {
-            const tr = document.createElement('tr');
-            tr.className = `border-b border-slate-100 hover:bg-slate-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50/30'}`;
-            tr.innerHTML = `
-                <td class="p-4">
-                    <div class="font-extrabold text-corporate flex items-center gap-2">
-                        <div class="w-2 h-2 rounded-full bg-slate-400" style="background-color: ${row.barColor}"></div>
-                        ${row.entity}
-                    </div>
-                    <div class="text-[11px] text-slate-400 truncate max-w-[250px] mt-1" title="${row.sourceFile}"><i class="fas fa-file-excel mr-1"></i> ${row.sourceFile}</div>
-                </td>
-                <td class="p-4 text-right font-semibold text-slate-600">${row.headcount}</td>
-                <td class="p-4 text-right text-slate-600">${formatRM(row.basic)}</td>
-                <td class="p-4 text-right text-slate-600">${formatRM(row.allowances)}</td>
-                <td class="p-4 text-right text-slate-600">${formatRM(row.overtime)}</td>
-                <td class="p-4 text-right font-black text-brand-700 bg-brand-50/50 border-l border-brand-100">${formatRM(row.gross)}</td>
-                <td class="p-4 text-right text-rose-500 font-medium">-${formatRM(row.deductions)}</td>
-                <td class="p-4 text-right font-black text-emerald-700 bg-emerald-50/50 border-l border-emerald-100">${formatRM(row.net)}</td>
-            `;
-            tableBody.appendChild(tr);
-        });
-
-        const tableFoot = document.getElementById('payroll-table-foot');
-        tableFoot.innerHTML = `
-            <tr>
-                <td class="p-4 text-right uppercase tracking-widest text-xs font-black">Consolidated Total</td>
-                <td class="p-4 text-right font-black text-base">${totals.headcount}</td>
-                <td class="p-4 text-right font-bold text-slate-300">${formatRM(totals.basic)}</td>
-                <td class="p-4 text-right font-bold text-slate-300">${formatRM(totals.allowances)}</td>
-                <td class="p-4 text-right font-bold text-slate-300">${formatRM(totals.overtime)}</td>
-                <td class="p-4 text-right font-black text-brand-300 border-l border-slate-600">${formatRM(totals.gross)}</td>
-                <td class="p-4 text-right font-bold text-rose-300 border-l border-slate-600">-${formatRM(totals.deductions)}</td>
-                <td class="p-4 text-right font-black text-emerald-400 text-lg border-l border-slate-600 shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]">${formatRM(totals.net)}</td>
-            </tr>
-        `;
-
-        // ==========================================
-        // CHART.JS CONFIGURATIONS
-        // ==========================================
-        Chart.defaults.font.family = '"Plus Jakarta Sans", sans-serif';
-        Chart.defaults.color = '#64748b';
-        Chart.defaults.scale.grid.color = '#f1f5f9';
-
-        // 1. Stacked Composition Chart (Board Explainer)
-        const ctxComp = document.getElementById('compositionChart').getContext('2d');
-        new Chart(ctxComp, {
+        // Chart Initialization
+        const ctx = document.getElementById('payrollChart').getContext('2d');
+        let chart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: processedData.map(d => d.entity),
+                labels: monthNames,
                 datasets: [
                     {
-                        label: 'Basic Pay',
-                        data: processedData.map(d => d.basic),
-                        backgroundColor: '#0ea5e9', // Brand 500
-                        borderRadius: {topLeft: 0, topRight: 0, bottomLeft: 4, bottomRight: 4}
+                        label: 'H20 Savers Sdn Bhd',
+                        data: h20Total,
+                        backgroundColor: '#3b82f6', // Tailwind blue-500
+                        borderRadius: 4,
+                        stack: 'payroll'
                     },
                     {
-                        label: 'Allowances',
-                        data: processedData.map(d => d.allowances),
-                        backgroundColor: '#fbbf24', // Amber 400
+                        label: 'Red Brick Capital Sdn Bhd',
+                        data: redBrickTotal,
+                        backgroundColor: '#f43f5e', // Tailwind rose-500
+                        borderRadius: 4,
+                        stack: 'payroll'
                     },
                     {
-                        label: 'Overtime',
-                        data: processedData.map(d => d.overtime),
-                        backgroundColor: '#c084fc', // Purple 400
-                        borderRadius: {topLeft: 4, topRight: 4, bottomLeft: 0, bottomRight: 0}
+                        label: 'H2GO Global Sdn Bhd',
+                        data: h2goTotal,
+                        backgroundColor: '#14b8a6', // Tailwind teal-500
+                        borderRadius: { topLeft: 4, topRight: 4, bottomLeft: 0, bottomRight: 0 },
+                        stack: 'payroll'
                     }
                 ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { 
-                    legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } },
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        align: 'end',
+                        labels: {
+                            color: '#475569',
+                            font: { family: "'Plus Jakarta Sans', sans-serif", size: 12, weight: '600' },
+                            usePointStyle: true,
+                            pointStyle: 'circle',
+                            padding: 20
+                        }
+                    },
                     tooltip: {
-                        mode: 'index',
-                        intersect: false,
+                        backgroundColor: '#ffffff',
+                        titleColor: '#0f172a',
+                        bodyColor: '#334155',
+                        borderColor: '#e2e8f0',
+                        borderWidth: 1,
+                        padding: 12,
+                        boxPadding: 4,
+                        usePointStyle: true,
                         callbacks: {
                             label: function(context) {
-                                return context.dataset.label + ': ' + formatRM(context.parsed.y);
+                                return ` ${context.dataset.label}: RM ${context.parsed.y.toLocaleString('en-US')}`;
                             },
-                            footer: function(tooltipItems) {
-                                let total = 0;
-                                tooltipItems.forEach(function(tooltipItem) { total += tooltipItem.parsed.y; });
-                                return 'Gross Pay: ' + formatRM(total);
+                            footer: function(items) {
+                                let sum = items.reduce((a, b) => a + b.parsed.y, 0);
+                                return `Total Monthly Cost: RM ${sum.toLocaleString('en-US')}`;
                             }
                         }
                     }
                 },
                 scales: {
-                    x: { stacked: true, grid: { display: false } },
-                    y: { 
+                    x: {
                         stacked: true,
-                        ticks: { callback: (value) => 'RM' + (value / 1000) + 'k' },
-                        border: { display: false }
-                    }
-                }
-            }
-        });
-
-        // 2. Historical Trend Chart
-        const ctxTrend = document.getElementById('trendChart').getContext('2d');
-        new Chart(ctxTrend, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-                datasets: [
-                    {
-                        label: 'H20 Savers Sdn Bhd',
-                        data: [5760, 5620, 5940, 3870, 5120, 5680, 6380, 5980], // Reflecting exact OT + Basic + Allowance for Jan-Aug
-                        borderColor: '#3b82f6', backgroundColor: '#3b82f6', tension: 0.4, borderWidth: 3, pointRadius: 5, pointHoverRadius: 8, pointHitRadius: 20
+                        grid: { display: false },
+                        ticks: { color: '#64748b', font: { family: "'Plus Jakarta Sans', sans-serif", weight: '500' } }
                     },
-                    {
-                        label: 'Red Brick Capital Sdn Bhd',
-                        data: [8326.50, 8326.50, 8326.50, 8326.50, 8326.50, 8326.50, 8326.50, 8326.50],
-                        borderColor: '#ef4444', backgroundColor: '#ef4444', tension: 0.4, borderWidth: 3, pointRadius: 5, pointHoverRadius: 8, pointHitRadius: 20
-                    },
-                    {
-                        label: 'H2GO Global Sdn Bhd',
-                        data: [6500, 6500, 6500, 6500, 6500, 6500, 6500, 6500],
-                        borderColor: '#10b981', backgroundColor: '#10b981', tension: 0.4, borderWidth: 3, pointRadius: 5, pointHoverRadius: 8, pointHitRadius: 20
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: { 
-                    mode: 'nearest', 
-                    intersect: true 
-                },
-                plugins: {
-                    legend: { 
-                        position: 'top', 
-                        labels: { usePointStyle: true, boxWidth: 10, padding: 20 } 
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
-                        padding: 14,
-                        titleFont: { size: 14, family: '"Plus Jakarta Sans", sans-serif' },
-                        bodyFont: { size: 14, font-weight: 'bold', family: '"Plus Jakarta Sans", sans-serif' },
-                        cornerRadius: 8,
-                        displayColors: true,
-                        callbacks: {
-                            label: function(context) { return context.dataset.label + ': ' + formatRM(context.parsed.y); }
+                    y: {
+                        stacked: true,
+                        grid: { color: '#f1f5f9' },
+                        ticks: {
+                            color: '#64748b',
+                            font: { family: "'Plus Jakarta Sans', sans-serif", weight: '500' },
+                            callback: function(val) { return 'RM ' + val.toLocaleString(); }
                         }
                     }
-                },
-                scales: {
-                    x: { grid: { display: false } },
-                    y: { 
-                        beginAtZero: true,
-                        ticks: { callback: (value) => 'RM' + (value / 1000) + 'k' },
-                        border: { display: false }
-                    }
                 }
             }
         });
 
+        // Quarterly Interactive Controller
+        function setPeriod(period) {
+            const btnKeys = ['YTD', 'Q1', 'Q2', 'Q3', 'Q4'];
+            btnKeys.forEach(key => {
+                const el = document.getElementById('btn-' + key);
+                if (key === period) {
+                    el.className = 'px-3.5 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm border border-slate-200 transition-all font-bold';
+                } else {
+                    el.className = 'px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all font-medium';
+                }
+            });
+
+            const notice = document.getElementById('q4Notice');
+
+            if (period === 'Q4') {
+                notice.classList.remove('hidden');
+                chart.data.labels = [];
+                chart.data.datasets.forEach(ds => ds.data = []);
+            } else {
+                notice.classList.add('hidden');
+                let start = 0, end = 8;
+                if (period === 'Q1') { start = 0; end = 3; }
+                else if (period === 'Q2') { start = 3; end = 6; }
+                else if (period === 'Q3') { start = 6; end = 8; }
+
+                chart.data.labels = monthNames.slice(start, end);
+                chart.data.datasets[0].data = h20Total.slice(start, end);
+                chart.data.datasets[1].data = redBrickTotal.slice(start, end);
+                chart.data.datasets[2].data = h2goTotal.slice(start, end);
+            }
+            chart.update();
+        }
     </script>
 </body>
 </html>
