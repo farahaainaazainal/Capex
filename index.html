@@ -178,12 +178,8 @@
             <div class="glass-card p-6 flex flex-col">
                 <div class="mb-6 flex justify-between items-start">
                     <div>
-                        <h3 class="text-lg font-bold text-corporate">6-Month Net Payout Trend</h3>
-                        <p class="text-sm text-slate-500 mt-1">Historical trajectory of actual cash disbursement.</p>
-                    </div>
-                    <div class="bg-slate-100 p-1.5 rounded-lg flex text-xs font-bold text-slate-600">
-                        <button class="px-3 py-1 rounded bg-white shadow-sm text-brand-700">6M</button>
-                        <button class="px-3 py-1 rounded hover:bg-slate-200 transition">YTD</button>
+                        <h3 class="text-lg font-bold text-corporate">2026 Net Payout Trend (Jan - Aug)</h3>
+                        <p class="text-sm text-slate-500 mt-1">Interactive timeline. Click on points or legends to explore.</p>
                     </div>
                 </div>
                 <div class="chart-wrapper flex-grow min-h-[350px]">
@@ -483,32 +479,44 @@
         new Chart(ctxTrend, {
             type: 'line',
             data: {
-                labels: ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
                 datasets: [
                     {
                         label: 'H20 Savers Sdn Bhd',
-                        data: [5940, 3870, 5120, 5680, 6380, 5980], // Reflecting exact OT + Basic + Allowance
-                        borderColor: '#3b82f6', backgroundColor: '#3b82f6', tension: 0.4, borderWidth: 3, pointRadius: 4
+                        data: [5760, 5620, 5940, 3870, 5120, 5680, 6380, 5980], // Reflecting exact OT + Basic + Allowance for Jan-Aug
+                        borderColor: '#3b82f6', backgroundColor: '#3b82f6', tension: 0.4, borderWidth: 3, pointRadius: 5, pointHoverRadius: 8, pointHitRadius: 20
                     },
                     {
                         label: 'Red Brick Capital Sdn Bhd',
-                        data: [8326.50, 8326.50, 8326.50, 8326.50, 8326.50, 8326.50],
-                        borderColor: '#ef4444', backgroundColor: '#ef4444', tension: 0.4, borderWidth: 3, pointRadius: 4
+                        data: [8326.50, 8326.50, 8326.50, 8326.50, 8326.50, 8326.50, 8326.50, 8326.50],
+                        borderColor: '#ef4444', backgroundColor: '#ef4444', tension: 0.4, borderWidth: 3, pointRadius: 5, pointHoverRadius: 8, pointHitRadius: 20
                     },
                     {
                         label: 'H2GO Global Sdn Bhd',
-                        data: [6500, 6500, 6500, 6500, 6500, 6500],
-                        borderColor: '#10b981', backgroundColor: '#10b981', tension: 0.4, borderWidth: 3, pointRadius: 4
+                        data: [6500, 6500, 6500, 6500, 6500, 6500, 6500, 6500],
+                        borderColor: '#10b981', backgroundColor: '#10b981', tension: 0.4, borderWidth: 3, pointRadius: 5, pointHoverRadius: 8, pointHitRadius: 20
                     }
                 ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                interaction: { mode: 'index', intersect: false },
+                interaction: { 
+                    mode: 'nearest', 
+                    intersect: true 
+                },
                 plugins: {
-                    legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } },
+                    legend: { 
+                        position: 'top', 
+                        labels: { usePointStyle: true, boxWidth: 10, padding: 20 } 
+                    },
                     tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                        padding: 14,
+                        titleFont: { size: 14, family: '"Plus Jakarta Sans", sans-serif' },
+                        bodyFont: { size: 14, font-weight: 'bold', family: '"Plus Jakarta Sans", sans-serif' },
+                        cornerRadius: 8,
+                        displayColors: true,
                         callbacks: {
                             label: function(context) { return context.dataset.label + ': ' + formatRM(context.parsed.y); }
                         }
@@ -525,479 +533,6 @@
             }
         });
 
-    </script>
-</body>
-</html>        <header class="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-8 gap-6 animate-fade-in">
-            <div>
-                <div class="flex items-center gap-3 mb-2">
-                    <span class="bg-brand-100 text-brand-700 px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase">Board Presentation</span>
-                    <span class="text-slate-500 text-sm font-medium"><i class="far fa-calendar-alt mr-1"></i> September 2026</span>
-                </div>
-                <h1 class="text-3xl md:text-4xl font-extrabold text-corporate tracking-tight">Executive Payroll Dashboard</h1>
-                <p class="text-slate-500 mt-2 text-lg">Centralized analysis of distinct salary breakdowns across Group Entities.</p>
-            </div>
-            <div class="flex flex-wrap items-center gap-3 no-print">
-                <button onclick="downloadHTML()" class="bg-white border-2 border-brand-500 text-brand-700 px-5 py-2.5 rounded-xl hover:bg-brand-50 transition shadow-sm flex items-center gap-2 font-bold group">
-                    <i class="fas fa-file-code text-brand-500 group-hover:scale-110 transition-transform"></i> Download HTML
-                </button>
-                <button onclick="window.print()" class="bg-corporate border border-corporate text-white px-5 py-2.5 rounded-xl hover:bg-slate-800 transition shadow-md flex items-center gap-2 font-bold group">
-                    <i class="fas fa-print text-slate-300 group-hover:text-white transition-colors"></i> Export to PDF
-                </button>
-            </div>
-        </header>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-fade-in delay-100">
-            <!-- Total Gross -->
-            <div class="glass-card p-6 flex flex-col justify-between border-t-4 border-t-brand-500">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-sm font-bold text-slate-500 uppercase tracking-wide">Group Gross Payroll</p>
-                        <h2 class="text-3xl font-extrabold text-corporate mt-2" id="kpi-gross">RM0</h2>
-                    </div>
-                    <div class="w-10 h-10 rounded-lg bg-brand-50 flex items-center justify-center text-brand-500">
-                        <i class="fas fa-money-check-alt text-lg"></i>
-                    </div>
-                </div>
-                <div class="mt-4 flex items-center text-sm font-semibold text-emerald-600 bg-emerald-50 w-max px-2 py-1 rounded">
-                    <i class="fas fa-arrow-up mr-1"></i> 2.4% vs last month
-                </div>
-            </div>
-
-            <!-- Total Net -->
-            <div class="glass-card p-6 flex flex-col justify-between border-t-4 border-t-emerald-500">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-sm font-bold text-slate-500 uppercase tracking-wide">Group Net Payout</p>
-                        <h2 class="text-3xl font-extrabold text-corporate mt-2" id="kpi-net">RM0</h2>
-                    </div>
-                    <div class="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-500">
-                        <i class="fas fa-wallet text-lg"></i>
-                    </div>
-                </div>
-                <div class="mt-4 flex items-center text-sm font-semibold text-slate-500">
-                    <i class="fas fa-info-circle mr-1"></i> Actual cash disbursement
-                </div>
-            </div>
-
-            <!-- Total Deductions -->
-            <div class="glass-card p-6 flex flex-col justify-between border-t-4 border-t-rose-500">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-sm font-bold text-slate-500 uppercase tracking-wide">Total Deductions</p>
-                        <h2 class="text-3xl font-extrabold text-corporate mt-2" id="kpi-deductions">RM0</h2>
-                    </div>
-                    <div class="w-10 h-10 rounded-lg bg-rose-50 flex items-center justify-center text-rose-500">
-                        <i class="fas fa-file-invoice-dollar text-lg"></i>
-                    </div>
-                </div>
-                <div class="mt-4 flex items-center text-sm font-semibold text-slate-500">
-                    <i class="fas fa-building text-slate-400 mr-1"></i> Statutory & Tax Withholdings
-                </div>
-            </div>
-
-            <!-- Total Headcount -->
-            <div class="glass-card p-6 flex flex-col justify-between border-t-4 border-t-purple-500">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-sm font-bold text-slate-500 uppercase tracking-wide">Total Headcount</p>
-                        <h2 class="text-3xl font-extrabold text-corporate mt-2" id="kpi-headcount">0</h2>
-                    </div>
-                    <div class="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center text-purple-500">
-                        <i class="fas fa-users text-lg"></i>
-                    </div>
-                </div>
-                <div class="mt-4 flex items-center text-sm font-semibold text-slate-500">
-                    <i class="fas fa-network-wired text-slate-400 mr-1"></i> Across all 3 entities
-                </div>
-            </div>
-        </div>
-
-        <h3 class="text-xl font-bold text-corporate mb-4 animate-fade-in delay-200">Entity Salary Breakdowns</h3>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 animate-fade-in delay-200" id="entity-cards-container">
-            <!-- Populated via JS to ensure exact formula tracking -->
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 animate-fade-in delay-300">
-            <!-- Stacked Bar Chart: Explaining the composition visually -->
-            <div class="glass-card p-6 flex flex-col">
-                <div class="mb-6">
-                    <h3 class="text-lg font-bold text-corporate">Gross Salary Composition by Entity</h3>
-                    <p class="text-sm text-slate-500 mt-1">Visualizing the weight of Basic, Allowances, and Overtime.</p>
-                </div>
-                <div class="chart-wrapper flex-grow min-h-[350px]">
-                    <canvas id="compositionChart"></canvas>
-                </div>
-            </div>
-            
-            <!-- Line Chart: Trend -->
-            <div class="glass-card p-6 flex flex-col">
-                <div class="mb-6 flex justify-between items-start">
-                    <div>
-                        <h3 class="text-lg font-bold text-corporate">6-Month Net Payout Trend</h3>
-                        <p class="text-sm text-slate-500 mt-1">Historical trajectory of actual cash disbursement.</p>
-                    </div>
-                    <div class="bg-slate-100 p-1.5 rounded-lg flex text-xs font-bold text-slate-600">
-                        <button class="px-3 py-1 rounded bg-white shadow-sm text-brand-700">6M</button>
-                        <button class="px-3 py-1 rounded hover:bg-slate-200 transition">YTD</button>
-                    </div>
-                </div>
-                <div class="chart-wrapper flex-grow min-h-[350px]">
-                    <canvas id="trendChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <div class="glass-card overflow-hidden mb-12 animate-fade-in delay-300">
-            <div class="p-6 border-b border-slate-200 bg-slate-50/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h3 class="text-lg font-bold text-corporate">Centralized Payroll Master Data</h3>
-                    <p class="text-sm text-slate-500 mt-1">Data preserved directly from source Excel files.</p>
-                </div>
-                <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-3 py-1.5 rounded-full border border-emerald-200 shadow-sm flex items-center">
-                    <i class="fas fa-check-circle mr-1.5"></i> Formulas Verified
-                </span>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse whitespace-nowrap">
-                    <thead>
-                        <tr class="bg-slate-100 text-slate-500 text-xs uppercase tracking-widest">
-                            <th class="p-4 font-bold border-b border-slate-200">Entity Details</th>
-                            <th class="p-4 font-bold border-b border-slate-200 text-right">Headcount</th>
-                            <th class="p-4 font-bold border-b border-slate-200 text-right">Basic Pay</th>
-                            <th class="p-4 font-bold border-b border-slate-200 text-right">Allowances</th>
-                            <th class="p-4 font-bold border-b border-slate-200 text-right">Overtime</th>
-                            <th class="p-4 font-bold border-b border-slate-200 text-right bg-brand-50 text-brand-900 border-l border-brand-100">Gross Pay</th>
-                            <th class="p-4 font-bold border-b border-slate-200 text-right">Deductions</th>
-                            <th class="p-4 font-bold border-b border-slate-200 text-right bg-emerald-50 text-emerald-900 border-l border-emerald-100">Net Payout</th>
-                        </tr>
-                    </thead>
-                    <tbody id="payroll-table-body" class="text-sm">
-                        <!-- Populated via JS -->
-                    </tbody>
-                    <tfoot class="bg-slate-800 font-bold text-white shadow-inner" id="payroll-table-foot">
-                        <!-- Populated via JS -->
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-
-    </div>
-
-    <script>
-        // ==========================================
-        // STRICT DATA CONFIGURATION & FORMULAS
-        // Gross = Basic + Allowances + Overtime
-        // Net = Gross - Deductions
-        // ==========================================
-        
-        // REPLACE the values below with the exact numbers from your Excel files.
-        const sourceData = [
-            { 
-                entity: "Savers", 
-                sourceFile: "Payroll Summary_Savers.xls",
-                colorClass: "text-savers",
-                bgClass: "bg-blue-50",
-                barColor: "#3b82f6",
-                headcount: 145, 
-                basic: 450000, 
-                allowances: 35000, 
-                overtime: 12000, 
-                deductions: 82000 
-            },
-            { 
-                entity: "Red Brick", 
-                sourceFile: "Payroll Summary_Red Brick.xls",
-                colorClass: "text-redbrick",
-                bgClass: "bg-red-50",
-                barColor: "#ef4444",
-                headcount: 88, 
-                basic: 280000, 
-                allowances: 22000, 
-                overtime: 8500, 
-                deductions: 51000 
-            },
-            { 
-                entity: "H2Go Global", 
-                sourceFile: "Monthly Payroll H2Go Global_Saver- Contract for Service_Staff Movement (5).xlsx",
-                colorClass: "text-h2go",
-                bgClass: "bg-emerald-50",
-                barColor: "#10b981",
-                headcount: 42, 
-                basic: 135000, 
-                allowances: 8000, 
-                overtime: 2000, 
-                deductions: 19000 
-            }
-        ];
-
-        // Format Currency dynamically
-        const formatRM = (amount) => {
-            return new Intl.NumberFormat('en-MY', { 
-                style: 'currency', 
-                currency: 'MYR',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
-            }).format(amount);
-        };
-
-        let totals = {
-            headcount: 0, basic: 0, allowances: 0, overtime: 0, 
-            gross: 0, deductions: 0, net: 0
-        };
-
-        // Strict Formula Execution
-        const processedData = sourceData.map(item => {
-            const gross = item.basic + item.allowances + item.overtime; // FORMULA: Gross
-            const net = gross - item.deductions;                        // FORMULA: Net
-            
-            // Calculate percentages for board explanation
-            const pctBasic = ((item.basic / gross) * 100).toFixed(1);
-            const pctAllowances = ((item.allowances / gross) * 100).toFixed(1);
-            const pctOvertime = ((item.overtime / gross) * 100).toFixed(1);
-
-            // Accumulate Totals
-            totals.headcount += item.headcount;
-            totals.basic += item.basic;
-            totals.allowances += item.allowances;
-            totals.overtime += item.overtime;
-            totals.gross += gross;
-            totals.deductions += item.deductions;
-            totals.net += net;
-
-            return { ...item, gross, net, pctBasic, pctAllowances, pctOvertime };
-        });
-
-        // Update Top KPIs
-        document.getElementById('kpi-gross').innerText = formatRM(totals.gross);
-        document.getElementById('kpi-net').innerText = formatRM(totals.net);
-        document.getElementById('kpi-deductions').innerText = formatRM(totals.deductions);
-        document.getElementById('kpi-headcount').innerText = totals.headcount.toLocaleString();
-
-        // Populate Entity Specific Cards
-        const cardsContainer = document.getElementById('entity-cards-container');
-        processedData.forEach(row => {
-            const card = document.createElement('div');
-            card.className = "glass-card p-5";
-            card.innerHTML = `
-                <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
-                    <h4 class="text-lg font-extrabold text-corporate flex items-center">
-                        <i class="fas fa-building mr-2 ${row.colorClass}"></i> ${row.entity}
-                    </h4>
-                    <span class="text-xs font-bold bg-slate-100 text-slate-600 px-2 py-1 rounded">HC: ${row.headcount}</span>
-                </div>
-                
-                <div class="mb-4">
-                    <div class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Total Gross</div>
-                    <div class="text-2xl font-black ${row.colorClass}">${formatRM(row.gross)}</div>
-                </div>
-
-                <div class="space-y-3">
-                    <!-- Basic -->
-                    <div>
-                        <div class="flex justify-between text-xs mb-1">
-                            <span class="font-bold text-slate-600">Basic Pay</span>
-                            <span class="font-bold text-slate-400">${row.pctBasic}%</span>
-                        </div>
-                        <div class="w-full bg-slate-100 rounded-full h-2">
-                            <div class="${row.bgClass.replace('50', '500')} h-2 rounded-full" style="width: ${row.pctBasic}%"></div>
-                        </div>
-                    </div>
-                    <!-- Allowances -->
-                    <div>
-                        <div class="flex justify-between text-xs mb-1">
-                            <span class="font-bold text-slate-600">Allowances</span>
-                            <span class="font-bold text-slate-400">${row.pctAllowances}%</span>
-                        </div>
-                        <div class="w-full bg-slate-100 rounded-full h-2">
-                            <div class="bg-amber-400 h-2 rounded-full" style="width: ${row.pctAllowances}%"></div>
-                        </div>
-                    </div>
-                    <!-- Overtime -->
-                    <div>
-                        <div class="flex justify-between text-xs mb-1">
-                            <span class="font-bold text-slate-600">Overtime</span>
-                            <span class="font-bold text-slate-400">${row.pctOvertime}%</span>
-                        </div>
-                        <div class="w-full bg-slate-100 rounded-full h-2">
-                            <div class="bg-purple-400 h-2 rounded-full" style="width: ${row.pctOvertime}%"></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="mt-5 pt-4 border-t border-slate-100 flex justify-between items-center">
-                    <div class="text-xs text-slate-500 font-bold">Net Payout</div>
-                    <div class="text-lg font-extrabold text-slate-800">${formatRM(row.net)}</div>
-                </div>
-            `;
-            cardsContainer.appendChild(card);
-        });
-
-        // Populate Master Table
-        const tableBody = document.getElementById('payroll-table-body');
-        processedData.forEach((row, index) => {
-            const tr = document.createElement('tr');
-            tr.className = `border-b border-slate-100 hover:bg-slate-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50/30'}`;
-            tr.innerHTML = `
-                <td class="p-4">
-                    <div class="font-extrabold text-corporate flex items-center gap-2">
-                        <div class="w-2 h-2 rounded-full bg-slate-400" style="background-color: ${row.barColor}"></div>
-                        ${row.entity}
-                    </div>
-                    <div class="text-[11px] text-slate-400 truncate max-w-[250px] mt-1" title="${row.sourceFile}"><i class="fas fa-file-excel mr-1"></i> ${row.sourceFile}</div>
-                </td>
-                <td class="p-4 text-right font-semibold text-slate-600">${row.headcount}</td>
-                <td class="p-4 text-right text-slate-600">${formatRM(row.basic)}</td>
-                <td class="p-4 text-right text-slate-600">${formatRM(row.allowances)}</td>
-                <td class="p-4 text-right text-slate-600">${formatRM(row.overtime)}</td>
-                <td class="p-4 text-right font-black text-brand-700 bg-brand-50/50 border-l border-brand-100">${formatRM(row.gross)}</td>
-                <td class="p-4 text-right text-rose-500 font-medium">-${formatRM(row.deductions)}</td>
-                <td class="p-4 text-right font-black text-emerald-700 bg-emerald-50/50 border-l border-emerald-100">${formatRM(row.net)}</td>
-            `;
-            tableBody.appendChild(tr);
-        });
-
-        const tableFoot = document.getElementById('payroll-table-foot');
-        tableFoot.innerHTML = `
-            <tr>
-                <td class="p-4 text-right uppercase tracking-widest text-xs font-black">Consolidated Total</td>
-                <td class="p-4 text-right font-black text-base">${totals.headcount}</td>
-                <td class="p-4 text-right font-bold text-slate-300">${formatRM(totals.basic)}</td>
-                <td class="p-4 text-right font-bold text-slate-300">${formatRM(totals.allowances)}</td>
-                <td class="p-4 text-right font-bold text-slate-300">${formatRM(totals.overtime)}</td>
-                <td class="p-4 text-right font-black text-brand-300 border-l border-slate-600">${formatRM(totals.gross)}</td>
-                <td class="p-4 text-right font-bold text-rose-300 border-l border-slate-600">-${formatRM(totals.deductions)}</td>
-                <td class="p-4 text-right font-black text-emerald-400 text-lg border-l border-slate-600 shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]">${formatRM(totals.net)}</td>
-            </tr>
-        `;
-
-        // ==========================================
-        // CHART.JS CONFIGURATIONS
-        // ==========================================
-        Chart.defaults.font.family = '"Plus Jakarta Sans", sans-serif';
-        Chart.defaults.color = '#64748b';
-        Chart.defaults.scale.grid.color = '#f1f5f9';
-
-        // 1. Stacked Composition Chart (Board Explainer)
-        const ctxComp = document.getElementById('compositionChart').getContext('2d');
-        new Chart(ctxComp, {
-            type: 'bar',
-            data: {
-                labels: processedData.map(d => d.entity),
-                datasets: [
-                    {
-                        label: 'Basic Pay',
-                        data: processedData.map(d => d.basic),
-                        backgroundColor: '#0ea5e9', // Brand 500
-                        borderRadius: {topLeft: 0, topRight: 0, bottomLeft: 4, bottomRight: 4}
-                    },
-                    {
-                        label: 'Allowances',
-                        data: processedData.map(d => d.allowances),
-                        backgroundColor: '#fbbf24', // Amber 400
-                    },
-                    {
-                        label: 'Overtime',
-                        data: processedData.map(d => d.overtime),
-                        backgroundColor: '#c084fc', // Purple 400
-                        borderRadius: {topLeft: 4, topRight: 4, bottomLeft: 0, bottomRight: 0}
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { 
-                    legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } },
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false,
-                        callbacks: {
-                            label: function(context) {
-                                return context.dataset.label + ': ' + formatRM(context.parsed.y);
-                            },
-                            footer: function(tooltipItems) {
-                                let total = 0;
-                                tooltipItems.forEach(function(tooltipItem) { total += tooltipItem.parsed.y; });
-                                return 'Gross Pay: ' + formatRM(total);
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: { stacked: true, grid: { display: false } },
-                    y: { 
-                        stacked: true,
-                        ticks: { callback: (value) => 'RM' + (value / 1000) + 'k' },
-                        border: { display: false }
-                    }
-                }
-            }
-        });
-
-        // 2. Historical Trend Chart
-        const ctxTrend = document.getElementById('trendChart').getContext('2d');
-        new Chart(ctxTrend, {
-            type: 'line',
-            data: {
-                labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep (Current)'],
-                datasets: [
-                    {
-                        label: 'Savers',
-                        data: [320000, 325000, 323000, 328000, 330000, processedData.find(d=>d.entity==='Savers').net],
-                        borderColor: '#3b82f6', backgroundColor: '#3b82f6', tension: 0.4, borderWidth: 3, pointRadius: 4
-                    },
-                    {
-                        label: 'Red Brick',
-                        data: [200000, 205000, 202000, 208000, 215000, processedData.find(d=>d.entity==='Red Brick').net],
-                        borderColor: '#ef4444', backgroundColor: '#ef4444', tension: 0.4, borderWidth: 3, pointRadius: 4
-                    },
-                    {
-                        label: 'H2Go Global',
-                        data: [110000, 112000, 115000, 114000, 118000, processedData.find(d=>d.entity==='H2Go Global').net],
-                        borderColor: '#10b981', backgroundColor: '#10b981', tension: 0.4, borderWidth: 3, pointRadius: 4
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: { mode: 'index', intersect: false },
-                plugins: {
-                    legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) { return context.dataset.label + ': ' + formatRM(context.parsed.y); }
-                        }
-                    }
-                },
-                scales: {
-                    x: { grid: { display: false } },
-                    y: { 
-                        beginAtZero: true,
-                        ticks: { callback: (value) => 'RM' + (value / 1000) + 'k' },
-                        border: { display: false }
-                    }
-                }
-            }
-        });
-
-        // ==========================================
-        // DOWNLOAD FUNCTIONALITY
-        // ==========================================
-        function downloadHTML() {
-            const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
-            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'Board_Presentation_Payroll_Dashboard.html';
-            document.body.appendChild(a);
-            a.click();
-            
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
     </script>
 </body>
 </html>
